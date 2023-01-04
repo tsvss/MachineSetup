@@ -41,6 +41,7 @@ Run the [SoftwareInstallation.bat](SoftwareInstallations.bat) to install the fol
 2. Open the Terminal[^1] and set the Poweshell as the default profile in the settings
 3. Make necessary changes to [Power shell profile](./TerminalSetup/ConfigFiles/powershellProfile.ps1), for the frequently used commands and processes
 4. Run the Setup.bat to copy and configure the Terminal with Oh-My-Posh theme
+5. Run the [InstallPackages.ps1](./TerminalSetup/InstallPackages.ps1) in the terminal to install the additional packages required by the powershell
 
 
 [^1]: Install the terminal from [here](https://github.com/microsoft/terminal/releases), if not present by default
