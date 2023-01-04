@@ -39,4 +39,4 @@ Run the [SoftwareInstallation.bat](SoftwareInstallations.bat) to install the fol
 1. Install the Fonts
     - Install the fonts from the [Fonts](./Fonts/CascadiaCode/) folder
 2. Open the Terminal[^1] and set the Poweshell as the default profile in the settings
-    [^1]: Install the terminal from [here](), if not present by default
+    [^1]: Install the terminal from [here](https://github.com/microsoft/terminal/releases), if not present by default
