@@ -2,7 +2,7 @@
 Repository contains the automation scripts to setup the windows PC with the required software.
 
 ## Prerequisite
-- Winget (_Can be found on Microsoft store as `App Installer`_)
+- Winget[^1] (_Can be found on Microsoft store as `App Installer`_)
 
 Admin previlages to run the scripts
 
@@ -15,8 +15,10 @@ Run the [SoftwareInstallation.bat](SoftwareInstallations.bat) to install the fol
 - GitHub Desktop
 - GitHub CLI
 - Docker Desktop
+- Postman
 - Microsoft Powershell
 - WinMerge
+- Ubuntu (WSL)
 
 ### Communication
 - Microsoft Teams
@@ -34,14 +36,22 @@ Run the [SoftwareInstallation.bat](SoftwareInstallations.bat) to install the fol
 - Microsoft Powertoys
 - Twillio Authy 
 - VLC
+- Send to Kindle
+- Amazon Kindle
+- Gpg4Win
 
 ## Terminal Customization
 1. Install the Fonts
     - Install the fonts from the [Fonts](./Fonts/CascadiaCode/) folder
-2. Open the Terminal[^1] and set the Poweshell as the default profile in the settings
+2. Open the Terminal[^2] and set the Poweshell as the default profile in the settings
 3. Make necessary changes to [Power shell profile](./TerminalSetup/ConfigFiles/powershellProfile.ps1), for the frequently used commands and processes
 4. Run the [setup.bat](./TerminalSetup/setup.bat) to copy and configure the Terminal with Oh-My-Posh theme
 5. Run the [InstallPackages.ps1](./TerminalSetup/InstallPackages.ps1) in the terminal to install the additional packages required by the powershell
 
 
-[^1]: Install the terminal from [here](https://github.com/microsoft/terminal/releases), if not present by default
+[^1]: Install the WinGet from [here][wingetLink]
+[^2]: Install the terminal from [here][TerminalGitHubLink], if not present by default
+
+
+[wingetLink]: https://aka.ms/getwinget
+[TerminalGitHubLink]: https://github.com/microsoft/terminal/releases
