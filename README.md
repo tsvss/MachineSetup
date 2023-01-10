@@ -5,6 +5,7 @@ Repository contains the automation scripts to setup the windows PC with the requ
 - Winget[^1] (_Can be found on Microsoft store as `App Installer`_)
 
 Admin previlages to run the scripts
+_Run all the scripts in Administrator mode_
 
 ## Software Installation
 Run the [SoftwareInstallation.bat](SoftwareInstallations.bat) to install the following software.
@@ -40,6 +41,12 @@ Run the [SoftwareInstallation.bat](SoftwareInstallations.bat) to install the fol
 - Amazon Kindle
 - Gpg4Win
 
+## Installation of Choco Apps
+Run [InstallSoftwares.ps1](./InstallSoftwares.ps1) to setup few softwares using the Choco App installer
+
+### List of Choco Apps 
+- fnm (Node Manager)
+
 ## Terminal Customization
 1. Install the Fonts
     - Install the fonts from the [Fonts](./Fonts/CascadiaCode/) folder
@@ -48,6 +55,8 @@ Run the [SoftwareInstallation.bat](SoftwareInstallations.bat) to install the fol
 4. Run the [setup.bat](./TerminalSetup/setup.bat) to copy and configure the Terminal with Oh-My-Posh theme
 5. Run the [InstallPackages.ps1](./TerminalSetup/InstallPackages.ps1) in the terminal to install the additional packages required by the powershell
 
+## Visual Studio Code Extensions and Settings
+> To be automated
 
 [^1]: Install the WinGet from [here][wingetLink]
 [^2]: Install the terminal from [here][TerminalGitHubLink], if not present by default
