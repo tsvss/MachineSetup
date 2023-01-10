@@ -5,6 +5,7 @@ Repository contains the automation scripts to setup the windows PC with the requ
 - Winget[^1] (_Can be found on Microsoft store as `App Installer`_)
 
 Admin previlages to run the scripts
+
 _Run all the scripts in Administrator mode_
 
 ## Software Installation
