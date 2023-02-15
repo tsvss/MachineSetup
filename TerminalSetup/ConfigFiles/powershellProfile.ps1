@@ -14,13 +14,23 @@ set-alias desktop "Desktop.ps1"
 #Set-Theme ParadoxGlucose
 #Set-PoshPrompt -theme "D:\Dropbox\poshv3.json"
 
-oh-my-posh --init --shell pwsh --config "C:\Users\$([Environment]::UserName)\oh-my-posh\theme.json" | Invoke-Expression
-
+oh-my-posh --init --shell pwsh --config "C:\Users\$([Environment]::UserName])\oh-my-posh-theme.json" | Invoke-Expression
 fnm env --use-on-cd | Out-String | Invoke-Expression
 
-Set-PSReadLineOption -PredictionSource History
-Set-PSReadLineOption -PredictionViewStyle ListView
-Set-PSReadLineOption -EditMode Windows
+function .. {
+    cd ..
+}
+function .... {
+    cd ../../
+}
+function ...... {
+    cd ../../../
+}
+
+function projects{
+    D:
+    cd "D:\Project"
+}
 
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)
@@ -42,10 +52,6 @@ Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
 
 # ---
 
-function projects {
-    D:
-    cd "D:\Projects"
-}
 
 # This is an example profile for PSReadLine.
 #
@@ -684,6 +690,22 @@ Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineOption -PredictionViewStyle ListView
 Set-PSReadLineOption -EditMode Windows
 
+
+# This is an example of a macro that you might use to execute a command.
+# This will add the command to history.
+Set-PSReadLineKeyHandler -Key Ctrl+Shift+b `
+    -BriefDescription BuildCurrentDirectory `
+    -LongDescription "Build the current directory" `
+    -ScriptBlock {
+        [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+        if(Test-Path -Path ".\package.json") {
+            [Microsoft.PowerShell.PSConsoleReadLine]::Insert("npm run build")
+        }else {
+            [Microsoft.PowerShell.PSConsoleReadLine]::Insert("dotnet build")
+        }
+        [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+    }
+
 Set-PSReadLineKeyHandler -Key Ctrl+Shift+s `
     -BriefDescription StartCurrentDirectory `
     -LongDescription "Start the current directory" `
@@ -696,17 +718,6 @@ Set-PSReadLineKeyHandler -Key Ctrl+Shift+s `
         }
         [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
     }
-
-# This is an example of a macro that you might use to execute a command.
-# This will add the command to history.
-Set-PSReadLineKeyHandler -Key Ctrl+Shift+b `
-                         -BriefDescription BuildCurrentDirectory `
-                         -LongDescription "Build the current directory" `
-                         -ScriptBlock {
-    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("dotnet build")
-    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
-}
 
 Set-PSReadLineKeyHandler -Key Ctrl+Shift+t `
                          -BriefDescription BuildCurrentDirectory `
