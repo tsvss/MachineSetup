@@ -17,18 +17,18 @@ oh-my-posh --init --shell pwsh --config "C:\Users\$([Environment]::UserName)\oh-
 fnm env --use-on-cd | Out-String | Invoke-Expression
 
 function .. {
-    cd ..
+    Set-Location ..
 }
 function .... {
-    cd ../../
+    Set-Location ../../
 }
 function ...... {
-    cd ../../../
+    Set-Location ../../../
 }
 
 function projects {
     D:
-    cd "D:\Project"
+    Set-Location "D:\Project"
 }
 
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
@@ -508,7 +508,7 @@ Set-PSReadLineKeyHandler -Key F1 `
 #
 # Ctrl+Shift+j then type a key to mark the current directory.
 # Ctrj+j then the same key will change back to that directory without
-# needing to type cd and won't change the command line.
+# needing to type Set-Location and won't change the command line.
 
 #
 $global:PSReadLineMarks = @{}
@@ -532,7 +532,7 @@ Set-PSReadLineKeyHandler -Key Ctrl+j `
     $key = [Console]::ReadKey()
     $dir = $global:PSReadLineMarks[$key.KeyChar]
     if ($dir) {
-        cd $dir
+        Set-Location $dir
         [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
     }
 }
@@ -543,7 +543,7 @@ Set-PSReadLineKeyHandler -Key Alt+j `
     -ScriptBlock {
     param($key, $arg)
 
-    $global:PSReadLineMarks.GetEnumerator() | % {
+    $global:PSReadLineMarks.GetEnumerator() | ForEach-Object {
         [PSCustomObject]@{Key = $_.Key; Dir = $_.Value } } |
     Format-Table -AutoSize | Out-Host
 

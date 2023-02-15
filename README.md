@@ -7,7 +7,6 @@ Repository contains the automation scripts to setup the windows PC with the requ
 - Winget[^1] (_Can be found on Microsoft store as `App Installer`_)
 
 Admin previlages to run the scripts
-
 _Run all the scripts in Administrator mode_
 
 ## Software Installation
@@ -61,7 +60,6 @@ Run [InstallSoftwares.ps1](./InstallSoftwares.ps1) to setup few softwares using 
 ## Hyper-V
 
 Enable the Hyper-V on the Windows using the [HyperV.bat](./HyperV.bat).
-
 _Run it in Administrator mode_
 
 ## Terminal Customization
@@ -80,11 +78,5 @@ _Run it in Administrator mode_
 [^1]: Install the WinGet from [here][wingetlink]
 [^2]: Install the terminal from [here][terminalgithublink], if not present by default
 
-<<<<<<< HEAD
-
-[wingetLink]: https://aka.ms/getwinget
-[TerminalGitHubLink]: https://github.com/microsoft/terminal/releases
-=======
 [wingetlink]: https://aka.ms/getwinget
 [terminalgithublink]: https://github.com/microsoft/terminal/releases
->>>>>>> c0f83f8 (VSCode Setup)
