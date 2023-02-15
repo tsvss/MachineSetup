@@ -14,7 +14,7 @@ set-alias desktop "Desktop.ps1"
 #Set-Theme ParadoxGlucose
 #Set-PoshPrompt -theme "D:\Dropbox\poshv3.json"
 
-oh-my-posh --init --shell pwsh --config "C:\Users\$([Environment]::UserName])\oh-my-posh-theme.json" | Invoke-Expression
+oh-my-posh --init --shell pwsh --config "C:\Users\$([Environment]::UserName)\oh-my-posh\theme.json" | Invoke-Expression
 fnm env --use-on-cd | Out-String | Invoke-Expression
 
 function .. {
