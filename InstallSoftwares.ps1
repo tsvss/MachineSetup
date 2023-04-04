@@ -56,3 +56,4 @@ Function Install-ChocolateyApps
 
 CheckRunAsAdministrator
 Install-Chocolatey
+Install-ChocolateyApps
