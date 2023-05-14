@@ -2,7 +2,7 @@ winget install --id=Git.Git -e --accept-package-agreements --accept-source-agree
 winget install --id=GitHub.cli -e  
 winget install --id=GitHub.GitHubDesktop -e 
 winget install --id=Microsoft.VisualStudio.2022.Community -e  
-winget install --id=Microsoft.VisualStudioCode -e
+winget install Microsoft.VisualStudioCode --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders"'
 winget install --id=Docker.DockerDesktop -e 
 winget install --id Postman.Postman -e
 winget install --id GnuPG.Gpg4win -e
