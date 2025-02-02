@@ -31,6 +31,133 @@ function projects {
     Set-Location "D:\Project"
 }
 
+function dev {
+    E:
+}
+
+# git
+
+function gb {
+    git checkout -b $args
+}
+ 
+function gbt ([string] $taskid) {
+    git checkout -b "task/$taskid"
+}
+ 
+function gs {
+    git checkout $args
+    git pull
+}
+ 
+function gmaster {
+    gs 'master'
+}
+ 
+function gmain {
+    gs 'main'
+}
+ 
+function gdev {
+    gs 'develop'
+}
+ 
+function grb {
+    git fetch
+    git rebase origin/$args
+}
+ 
+function gco {
+    git add .
+    git commit -m $args
+}
+ 
+function gfeat {
+    if($null -eq $args[1]) {
+        gco "feat: $($args[0])"
+    }else {
+        gco "feat($($args[0])): $($args[1])"
+    }
+}
+ 
+function gfix {
+    if($null -eq $args[1]) {
+        gco "fix: $($args[0])"
+    }else {
+        gco "fix($($args[0])): $($args[1])"
+    }
+}
+ 
+function gtest {
+    if($null -eq $args[1]) {
+        gco "test: $($args[0])"
+    }else {
+        gco "test($($args[0])): $($args[1])"
+    }
+}
+ 
+function gdocs {
+    if($null -eq $args[1]) {
+        gco "docs: $($args[0])"
+    }else {
+        gco "docs($($args[0])): $($args[1])"
+    }
+}
+ 
+function gstyle {
+    if($null -eq $args[1]) {
+        gco "style: $($args[0])"
+    }else {
+        gco "style($($args[0])): $($args[1])"
+    }
+}
+ 
+function grefactor {
+    if($null -eq $args[1]) {
+        gco "refactor: $($args[0])"
+    }else {
+        gco "refactor($($args[0])): $($args[1])"
+    }
+}
+ 
+function gperf {
+    if($null -eq $args[1]) {
+        gco "perf: $($args[0])"
+    }else {
+        gco "perf($($args[0])): $($args[1])"
+    }
+}
+ 
+function gchore {
+    if($null -eq $args[1]) {
+        gco "chore: $($args[0])"
+    }else {
+        gco "chore($($args[0])): $($args[1])"
+    }
+}
+ 
+function gpu {
+    git pull
+}
+ 
+function goops {
+    git add .
+    git commit --amend --no-edit
+}
+ 
+function gfp {
+    git push --force-with-lease
+}
+
+function gpush {
+    git push
+}
+ 
+function gr {
+    git reset --hard
+    git clean -f -d
+}
+
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)
     [Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.Utf8Encoding]::new()
@@ -671,7 +798,7 @@ Set-PSReadLineKeyHandler -Key Ctrl+Shift+s `
     -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
     if (Test-Path -Path ".\package.json") {
-        [Microsoft.PowerShell.PSConsoleReadLine]::Insert("npm start")
+        [Microsoft.PowerShell.PSConsoleReadLine]::Insert("ng serve --ssl --ssl-key c:\\certificates\\localhost.key  --ssl-cert c:\\certificates\localhost.crt")
     }
     else {
         [Microsoft.PowerShell.PSConsoleReadLine]::Insert("dotnet run")
