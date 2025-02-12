@@ -18,7 +18,6 @@ winget install --id=7zip.7zip -e
 winget install --id Amazon.SendToKindle -e
 winget install --id Amazon.Kindle -e
 winget install --id=Twilio.Authy -e
-winget install --id=VideoLAN.VLC -e  
-winget install --id=WhatsApp.WhatsApp -e 
+winget install --id=VideoLAN.VLC -e
 winget install --id Zoom.Zoom -e
 winget install --id Canonical.Ubuntu -e
