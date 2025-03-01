@@ -26,13 +26,25 @@ function ...... {
     Set-Location ../../../
 }
 
-function projects {
-    D:
-    Set-Location "D:\Project"
-}
-
 function dev {
-    E:
+    $driveLetter = "E:"
+    $vhdPath = "D:\VHD\DevDrive.vhdx"
+
+    if (Test-Path $driveLetter) {
+        Set-Location $driveLetter
+    } else {
+        Write-Host "Dev drive ($driveLetter) not found. Mounting Dev Drive..." -ForegroundColor Yellow
+        Mount-VHD -Path $vhdPath -ErrorAction SilentlyContinue
+
+        # Wait a moment for the drive to be available
+        Start-Sleep -Seconds 2
+
+        if (Test-Path $driveLetter) {
+            Set-Location $driveLetter
+        } else {
+            Write-Host "Failed to mount Dev drive ($vhdPath). Please check manually." -ForegroundColor Red
+        }
+    }
 }
 
 # git
@@ -157,6 +169,29 @@ function gr {
     git reset --hard
     git clean -f -d
 }
+
+function howdy {
+    git status
+}
+
+# Angular App Run & Serve
+function ignite {
+    param(
+        [int]$port
+    )
+
+    $sslKey = "d:\SSLCert\localhost.key"
+    $sslCert = "d:\SSLCert\localhost.crt"
+
+    Write-Host "Igniting Angular server... 🚀" -ForegroundColor Green
+
+    if ($port) {
+        ng serve --ssl --ssl-key $sslKey --ssl-cert $sslCert --port $port
+    } else {
+        ng serve --ssl --ssl-key $sslKey --ssl-cert $sslCert
+    }
+}
+
 
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)

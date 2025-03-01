@@ -12,6 +12,10 @@ Once the terminal is configured, it looks like this
 - Terminal-Icons
   - For display of glyphs against the files
 
+## Powershell Profile Customization
+
+Find the details of Profile Customizations [here](./ConfigFiles/Profile.md)
+
 ## Note
 
 Install the Terminal application and set the Powershell as the default profile.\
