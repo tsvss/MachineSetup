@@ -47,7 +47,19 @@ function dev {
     }
 }
 
+function rmf{
+    Remove-Item -Path "$args" -Recurse -Force
+}
+
+function nf ($name){
+     mkdir $name | cd $name
+}
+
 # git
+
+function gswitch{
+    git switch $args
+}
 
 function gb {
     git checkout -b $args
@@ -145,6 +157,14 @@ function gchore {
         gco "chore: $($args[0])"
     }else {
         gco "chore($($args[0])): $($args[1])"
+    }
+}
+
+function gwf {
+    if($null -eq $args[1]) {
+        gco "ci: $($args[0])"
+    }else {
+        gco "ci($($args[0])): $($args[1])"
     }
 }
  
