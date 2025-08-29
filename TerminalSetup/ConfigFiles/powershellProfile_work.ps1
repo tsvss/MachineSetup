@@ -12,13 +12,14 @@ set-alias desktop "Desktop.ps1"
 
 #region Profile Settings
 # Paths and shared settings
-$Global:DevDriveLetter = 'E:'
-$Global:DevVhdPath     = 'D:\VHD\DevDrive.vhdx'
-$Global:ProjectRoot    = $Global:DevDriveLetter
+$Global:ProjectRoot = 'C:\ProjectFiles'
 $Global:OhMyPoshThemePath = "C:\Users\$([Environment]::UserName)\oh-my-posh\theme.json"
-$Global:SslKeyPath        = 'd:\SSLCert\localhost.key'
-$Global:SslCertPath       = 'd:\SSLCert\localhost.crt'
+$Global:EndorctlPath = Join-Path $HOME 'endorctl.exe'
+$Global:SslKeyPath = Join-Path $Global:ProjectRoot 'misc\SSLCert\cert.key'
+$Global:SslCertPath = Join-Path $Global:ProjectRoot 'misc\SSLCert\cert.crt'
 #endregion Profile Settings
+
+Set-Alias -Name endorctl -Value $Global:EndorctlPath
 
 oh-my-posh --init --shell pwsh --config $Global:OhMyPoshThemePath | Invoke-Expression
 fnm env --use-on-cd | Out-String | Invoke-Expression
@@ -82,47 +83,18 @@ function rmf{
 #>
 function nf ($name){
      Write-Host "📁 Creating and switching to new folder: $name" -ForegroundColor Cyan
-     mkdir $name | Set-Location $name
+     mkdir $name | cd $name
 }
 
 <#
 .SYNOPSIS
- Mount Dev Drive if needed and jump to your project root directory.
+ Jump to your project root directory.
 .EXAMPLE
  projects
 #>
 function projects{
-    Write-Host "📂 Switching to project root (Dev Drive): $Global:ProjectRoot" -ForegroundColor Cyan
-    dev
-}
-
-<#
-.SYNOPSIS
- Mount the configured Dev VHD (if needed) and switch to the Dev Drive root.
-.DESCRIPTION
- Uses $Global:DevDriveLetter and $Global:DevVhdPath to mount and navigate.
-.EXAMPLE
- dev
-#>
-function dev {
-    $driveLetter = $Global:DevDriveLetter
-    $vhdPath = $Global:DevVhdPath
-
-    if (Test-Path $driveLetter) {
-        Set-Location $driveLetter
-    } else {
-        Write-Host "💽 Dev drive ($driveLetter) not found. Mounting Dev Drive..." -ForegroundColor Yellow
-        Mount-VHD -Path $vhdPath -ErrorAction SilentlyContinue
-
-        # Wait a moment for the drive to be available
-        Start-Sleep -Seconds 2
-
-        if (Test-Path $driveLetter) {
-            Set-Location $driveLetter
-        } else {
-            Write-Host "❌ Failed to mount Dev drive ($vhdPath). Please check manually." -ForegroundColor Red
-        }
-    }
+    Write-Host "📂 Switching to project root: $Global:ProjectRoot" -ForegroundColor Cyan
+    Set-Location $Global:ProjectRoot
 }
 
 #endregion Navigation & FS helpers
@@ -166,6 +138,40 @@ function gb {
 function gbt ([string] $taskid) {
     Write-Host "🧩 Creating and switching to new task branch: task/$taskid" -ForegroundColor Cyan
     git checkout -b "task/$taskid"
+}
+
+<#
+.SYNOPSIS
+ Commit with ticket ID prefix extracted from current branch.
+.DESCRIPTION
+ Builds summary as "[TICKET] Summary" (TICKET inferred from current branch name split by '-' or '_').
+ If Description is provided, it's used as the commit body.
+.PARAMETER Summary
+ Commit summary line.
+.PARAMETER Description
+ Optional commit body/description.
+.EXAMPLE
+ gsco -Summary "Refactor login flow" -Description "Extract helpers into TokenUtils"
+#>
+function gsco{
+    param(
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string] $Summary,
+        [Parameter(Position = 1)]
+        [string] $Description
+    )
+    $currentBranch = git branch --show-current
+    $parts = $currentBranch -split "[-_]"
+    $ticketId = $parts[0] + '-' + $parts[1]
+    Write-Host "Committing changes for $ticketId" -ForegroundColor Cyan
+
+    $prefixedSummary = "[$ticketId] $Summary"
+    Write-Host "Summary: $prefixedSummary" -ForegroundColor Cyan
+    if ($PSBoundParameters.ContainsKey('Description') -and $null -ne $Description -and $Description -ne '') {
+        gco -Summary $prefixedSummary -Description $Description
+    } else {
+        gco -Summary $prefixedSummary
+    }
 }
 
 <#
@@ -1325,7 +1331,6 @@ function Show-ProfileCapabilities {
     Write-Host "  Example: ↩️  ......                       -> Up three directories" -ForegroundColor Cyan
     Write-Host "  Example: 📁 nf MyApp                     -> Create folder 'MyApp' and cd into it" -ForegroundColor Cyan
     Write-Host "  Example: 🗑️ rmf .\dist                    -> Force remove folder/file recursively" -ForegroundColor Cyan
-    Write-Host "  Example: 💽 dev                           -> Mount VHD and jump to $Global:DevDriveLetter" -ForegroundColor Cyan
     Write-Host "  Example: 📂 projects                      -> Jump to $Global:ProjectRoot" -ForegroundColor Cyan
 
     # Git basics
@@ -1347,6 +1352,8 @@ function Show-ProfileCapabilities {
     Write-Host "`n📝 [Git: Commits]" -ForegroundColor Magenta
     Write-Host "  Example: 📝 gco -Summary 'fix: bug' -Description 'details'" -ForegroundColor Cyan
     Write-Host "           -> Stage all and commit with summary and optional description" -ForegroundColor Gray
+    Write-Host "  Example: 🧾 gsco -Summary 'Refactor service' -Description 'extract helper'" -ForegroundColor Cyan
+    Write-Host "           -> Prefix summary with [TICKET] from current branch" -ForegroundColor Gray
     Write-Host "  Example: 🧱 gfeat -Scope core -Summary 'add X' -Description 'Y' (also: gfix, gtest, gdocs, gstyle, grefactor, gperf, gchore, gwf)" -ForegroundColor Cyan
     Write-Host "           -> Conventional commit with optional scope" -ForegroundColor Gray
     Write-Host "  Example: ✏️ goops                          -> Amend last commit without changing message" -ForegroundColor Cyan
