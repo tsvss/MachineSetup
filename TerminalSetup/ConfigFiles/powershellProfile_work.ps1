@@ -557,16 +557,45 @@ function gpu {
  
 <#
 .SYNOPSIS
- Amend the last commit without changing its message.
+ Amend the last commit; optionally edit or set a new message.
 .DESCRIPTION
- Stages all changes and runs 'git commit --amend --no-edit'. Useful for fixing up the most recent commit.
+ Stages all changes then amends the last commit.
+ - Default: uses --no-edit (message unchanged)
+ -Edit: opens editor to modify the message
+ -Message: sets a new message (single line)
+.PARAMETER Edit
+ Open your editor to modify the existing commit message.
+.PARAMETER Message
+ Provide a new commit message to replace the existing one.
 .EXAMPLE
  goops
-#>
+#> Stages all and amends without changing the message.
+.EXAMPLE
+ goops -Edit
+#> Stages all and opens the editor to edit the message.
+.EXAMPLE
+ goops -Message "fix: adjust API URL"
+#> Stages all and amends with the provided message.
 function goops {
-    Write-Host "✏️ Amending last commit (message unchanged)..." -ForegroundColor Yellow
+    [CmdletBinding()]
+    param(
+        [switch]$Edit,
+        [string]$Message
+    )
+
     git add .
-    git commit --amend --no-edit
+    if ($PSBoundParameters.ContainsKey('Message') -and $null -ne $Message -and $Message -ne '') {
+        Write-Host "✏️ Amending last commit (with new message)..." -ForegroundColor Yellow
+        git commit --amend -m $Message
+    }
+    elseif ($Edit) {
+        Write-Host "✏️ Amending last commit (editing message)..." -ForegroundColor Yellow
+        git commit --amend
+    }
+    else {
+        Write-Host "✏️ Amending last commit (message unchanged)..." -ForegroundColor Yellow
+        git commit --amend --no-edit
+    }
 }
  
 <#
@@ -1357,6 +1386,8 @@ function Show-ProfileCapabilities {
     Write-Host "  Example: 🧱 gfeat -Scope core -Summary 'add X' -Description 'Y' (also: gfix, gtest, gdocs, gstyle, grefactor, gperf, gchore, gwf)" -ForegroundColor Cyan
     Write-Host "           -> Conventional commit with optional scope" -ForegroundColor Gray
     Write-Host "  Example: ✏️ goops                          -> Amend last commit without changing message" -ForegroundColor Cyan
+    Write-Host "  Example: ✏️ goops -Edit                    -> Amend and edit the message" -ForegroundColor Cyan
+    Write-Host "  Example: ✏️ goops -Message 'fix: adjust API URL' -> Amend with new message" -ForegroundColor Cyan
 
     # Angular
     Write-Host "`n🅰️ [Angular]" -ForegroundColor Magenta
