@@ -279,11 +279,11 @@ function goblivion {
 .PARAMETER Description
  Optional commit body/description.
 .PARAMETER Scope
- Optional scope for the conventional commit. Alias: scope
+ Optional scope for the conventional commit. Alias: s
 .EXAMPLE
  gfeat -Summary "add dashboard"
 .EXAMPLE
- gfeat -Scope "auth" -Summary "add JWT support" -Description "Introduce token service"
+ gfeat -s "auth" -Summary "add JWT support" -Description "Introduce token service"
 #>
 function gfeat {
     param(
@@ -291,7 +291,7 @@ function gfeat {
         [string] $Summary,
         [Parameter(Position = 1)]
         [string] $Description,
-        [Alias('scope')]
+        [Alias('s')]
         [string] $Scope
     )
     $line = if ($PSBoundParameters.ContainsKey('Scope') -and $null -ne $Scope -and $Scope -ne '') { "feat($Scope): $Summary" } else { "feat: $Summary" }
@@ -312,11 +312,11 @@ function gfeat {
 .PARAMETER Description
  Optional commit body/description.
 .PARAMETER Scope
- Optional scope for the conventional commit. Alias: scope
+ Optional scope for the conventional commit. Alias: s
 .EXAMPLE
  gfix -Summary "null ref on dashboard"
 .EXAMPLE
- gfix -Scope "auth" -Summary "token refresh race" -Description "Add lock and retry"
+ gfix -s "auth" -Summary "token refresh race" -Description "Add lock and retry"
 #>
 function gfix {
     param(
@@ -324,7 +324,7 @@ function gfix {
         [string] $Summary,
         [Parameter(Position = 1)]
         [string] $Description,
-        [Alias('scope')]
+        [Alias('s')]
         [string] $Scope
     )
     $line = if ($PSBoundParameters.ContainsKey('Scope') -and $null -ne $Scope -and $Scope -ne '') { "fix($Scope): $Summary" } else { "fix: $Summary" }
@@ -345,7 +345,7 @@ function gfix {
 .PARAMETER Description
  Optional commit body/description.
 .PARAMETER Scope
- Optional scope for the conventional commit. Alias: scope
+ Optional scope for the conventional commit. Alias: s
 #>
 function gtest {
     param(
@@ -353,7 +353,7 @@ function gtest {
         [string] $Summary,
         [Parameter(Position = 1)]
         [string] $Description,
-        [Alias('scope')]
+        [Alias('s')]
         [string] $Scope
     )
     $line = if ($PSBoundParameters.ContainsKey('Scope') -and $null -ne $Scope -and $Scope -ne '') { "test($Scope): $Summary" } else { "test: $Summary" }
@@ -374,7 +374,7 @@ function gtest {
 .PARAMETER Description
  Optional commit body/description.
 .PARAMETER Scope
- Optional scope for the conventional commit. Alias: scope
+ Optional scope for the conventional commit. Alias: s
 #>
 function gdocs {
     param(
@@ -382,7 +382,7 @@ function gdocs {
         [string] $Summary,
         [Parameter(Position = 1)]
         [string] $Description,
-        [Alias('scope')]
+        [Alias('s')]
         [string] $Scope
     )
     $line = if ($PSBoundParameters.ContainsKey('Scope') -and $null -ne $Scope -and $Scope -ne '') { "docs($Scope): $Summary" } else { "docs: $Summary" }
@@ -403,7 +403,7 @@ function gdocs {
 .PARAMETER Description
  Optional commit body/description.
 .PARAMETER Scope
- Optional scope for the conventional commit. Alias: scope
+ Optional scope for the conventional commit. Alias: s
 #>
 function gstyle {
     param(
@@ -411,7 +411,7 @@ function gstyle {
         [string] $Summary,
         [Parameter(Position = 1)]
         [string] $Description,
-        [Alias('scope')]
+        [Alias('s')]
         [string] $Scope
     )
     $line = if ($PSBoundParameters.ContainsKey('Scope') -and $null -ne $Scope -and $Scope -ne '') { "style($Scope): $Summary" } else { "style: $Summary" }
@@ -432,7 +432,7 @@ function gstyle {
 .PARAMETER Description
  Optional commit body/description.
 .PARAMETER Scope
- Optional scope for the conventional commit. Alias: scope
+ Optional scope for the conventional commit. Alias: s
 #>
 function grefactor {
     param(
@@ -440,7 +440,7 @@ function grefactor {
         [string] $Summary,
         [Parameter(Position = 1)]
         [string] $Description,
-        [Alias('scope')]
+        [Alias('s')]
         [string] $Scope
     )
     $line = if ($PSBoundParameters.ContainsKey('Scope') -and $null -ne $Scope -and $Scope -ne '') { "refactor($Scope): $Summary" } else { "refactor: $Summary" }
@@ -461,7 +461,7 @@ function grefactor {
 .PARAMETER Description
  Optional commit body/description.
 .PARAMETER Scope
- Optional scope for the conventional commit. Alias: scope
+ Optional scope for the conventional commit. Alias: s
 #>
 function gperf {
     param(
@@ -469,7 +469,7 @@ function gperf {
         [string] $Summary,
         [Parameter(Position = 1)]
         [string] $Description,
-        [Alias('scope')]
+        [Alias('s')]
         [string] $Scope
     )
     $line = if ($PSBoundParameters.ContainsKey('Scope') -and $null -ne $Scope -and $Scope -ne '') { "perf($Scope): $Summary" } else { "perf: $Summary" }
@@ -490,7 +490,7 @@ function gperf {
 .PARAMETER Description
  Optional commit body/description.
 .PARAMETER Scope
- Optional scope for the conventional commit. Alias: scope
+ Optional scope for the conventional commit. Alias: s
 #>
 function gchore {
     param(
@@ -498,7 +498,7 @@ function gchore {
         [string] $Summary,
         [Parameter(Position = 1)]
         [string] $Description,
-        [Alias('scope')]
+        [Alias('s')]
         [string] $Scope
     )
     $line = if ($PSBoundParameters.ContainsKey('Scope') -and $null -ne $Scope -and $Scope -ne '') { "chore($Scope): $Summary" } else { "chore: $Summary" }
@@ -519,7 +519,7 @@ function gchore {
 .PARAMETER Description
  Optional commit body/description.
 .PARAMETER Scope
- Optional scope for the conventional commit. Alias: scope
+ Optional scope for the conventional commit. Alias: s
 #>
 function gwf {
     param(
@@ -527,7 +527,7 @@ function gwf {
         [string] $Summary,
         [Parameter(Position = 1)]
         [string] $Description,
-        [Alias('scope')]
+        [Alias('s')]
         [string] $Scope
     )
     $line = if ($PSBoundParameters.ContainsKey('Scope') -and $null -ne $Scope -and $Scope -ne '') { "ci($Scope): $Summary" } else { "ci: $Summary" }
