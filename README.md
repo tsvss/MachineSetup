@@ -1,82 +1,52 @@
-# Machine Setup Automation
+# README.md
+# 🪄 MachineSetup: The Wizard's Repository
 
-Repository contains the automation scripts to setup the windows PC with the required software.
+Welcome to the automated setup repository for your development environments. This project uses magical automation (PowerShell & Bash) to transfigure a fresh machine into a powerful workstation.
 
-## Prerequisite
+## 🌟 Profiles
 
-- Winget[^1] (_Can be found on Microsoft store as `App Installer`_)
+We support multiple "wizarding" profiles to suit different environments:
 
-Admin previlages to run the scripts
-_Run all the scripts in Administrator mode_
+| Profile | Target | OS | Status |
+| :--- | :--- | :--- | :--- |
+| **Lucye** | Personal | Windows/WSL | 🧙‍♂️ Active |
+| **Lysa** | Work | Windows | 🧪 Brewing |
+| **MacOS** | General | macOS | 🧪 Brewing |
 
-## Software Installation
+## 🪄 Lucye Setup (Personal)
 
-Run the [SoftwareInstallation.bat](SoftwareInstallations.bat) to install the following software.
+The Lucye setup is optimized for a full-stack developer working with .NET 10, Java, Python, Angular, and Cloud technologies.
 
-### Development Environment
+### **Summoning the Magic**
 
-- Visual Studio 2022 (Community)
-- Visual Studio Code
-- Git
-- GitHub Desktop
-- GitHub CLI
-- Docker Desktop
-- Postman
-- Microsoft Powershell
-- WinMerge
-- Ubuntu (WSL)
+To start the setup on a fresh Windows machine (using default Windows PowerShell):
 
-### Communication
+1. Open PowerShell as **Administrator**.
+2. Run the following command:
+   ```powershell
+   Set-ExecutionPolicy Bypass -Scope Process -Force
+   cd E:\MachineSetup\Profiles\Lucye\Windows
+   .\Setup-Lucye.ps1
+   ```
 
-- Microsoft Teams
-- Whatsapp
-- Zoom
+### **What's Inside?**
 
-### Browsers
+- **Core Artifacts:** .NET 10 (Elder Wand), Java (Ancient Script), VS Code (Pensieve), Docker (Suitcase).
+- **WSL Chamber:** Ubuntu 24.04 with Zsh, Oh My Zsh, and shared Node tools.
+- **Enchantments:** Cascadia Code Nerd Font, synced VS Code settings, and Git configuration.
+- **Vaults:** Google Drive (Gringotts), 1Password (Secret Keeper).
 
-- Google Chrome
+---
 
-### Misc
+## 📁 Repository Structure
 
-- 7 Zip
-- Notepad ++
-- Oh My Posh (Terminal Customization)
-- Google Drive
-- Microsoft Powertoys
-- Twillio Authy
-- VLC
-- Send to Kindle
-- Amazon Kindle
-- Gpg4Win
+- `Profiles/`: Profile-specific setup scripts and configurations.
+- `Scripts/`: Shared magical helpers (Font installation, Config syncing).
+- `Fonts/`: The magical typefaces required for the terminal.
+- `TerminalSetup/`: Configuration for Windows Terminal and Oh My Posh.
+- `vsCodeSetup/`: Visual Studio Code settings and extensions.
 
-## Installation of Choco Apps
+---
 
-Run [InstallSoftwares.ps1](./InstallSoftwares.ps1) to setup few softwares using the Choco App installer
-
-### List of Choco Apps
-
-- fnm (Node Manager)
-
-## Hyper-V
-
-Enable the Hyper-V on the Windows using the [HyperV.bat](./HyperV.bat).
-_Run it in Administrator mode_
-
-## Terminal Customization
-
-1. Install the Fonts
-   - Install the fonts from the [Fonts](./Fonts/CascadiaCode/) folder
-2. Open the Terminal[^2] and set the Poweshell as the default profile in the settings
-3. Make necessary changes to [Power shell profile](./TerminalSetup/ConfigFiles/powershellProfile.ps1), for the frequently used commands and processes
-4. Run the [setup.bat](./TerminalSetup/setup.bat) to copy and configure the Terminal with Oh-My-Posh theme
-5. Run the [InstallPackages.ps1](./TerminalSetup/InstallPackages.ps1) in the terminal to install the additional packages required by the powershell
-
-## Visual Studio Code Extensions and Settings
-
-> To be automated
-
-[^1]: Install the WinGet from [here][wingetlink]
-[^2]: Install the terminal from [here][terminalgithublink], if not present by default
-
-[wingetlink]: https://aka.ms/getwinget
-[terminalgithublink]: https://github.com/microsoft/terminal/releases
+## 📜 Legal Scrolls
+This project is licensed under the MIT License. Use the magic responsibly.
