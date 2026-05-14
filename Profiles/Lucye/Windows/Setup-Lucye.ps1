@@ -137,6 +137,10 @@ $repoRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.FullName
 
 Cast-Spell "Installing VS Code Extensions"
 $extensions = @(
+    "dracula-theme.theme-dracula",      # Theme
+    "amazonwebservices.amazon-q-vscode", # Amazon Q Developer
+    "ms-dotnettools.csdevkit",          # C# Dev Kit (Modern standard)
+    "ms-dotnettools.csharp",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "aaron-bond.better-comments",
@@ -144,10 +148,8 @@ $extensions = @(
     "naumovs.color-highlight",
     "anteprimorac.html-end-tag-labels",
     "github.vscode-pull-request-github",
-    "eamodio.gitlens-insiders",
+    "eamodio.gitlens",                  # Stable version
     "angular.ng-template",
-    "ms-dotnettools.csharp",
-    "visualstudioexptteam.vscodeintellicode",
     "ms-playwright.playwright",
     "yzhang.markdown-all-in-one",
     "davidanson.vscode-markdownlint",
@@ -156,6 +158,25 @@ $extensions = @(
 foreach ($ext in $extensions) {
     Write-Host "Installing extension: $ext" -ForegroundColor Gray
     & code --install-extension $ext --force
+}
+
+Cast-Spell "Enchanting Notepad++ with Dracula Theme"
+$nppThemeDir = "$env:APPDATA\Notepad++\themes"
+if (Test-Path $nppThemeDir) {
+    $draculaUrl = "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/generated/Dracula.xml"
+    $destFile = Join-Path $nppThemeDir "Dracula.xml"
+    Invoke-WebRequest -Uri $draculaUrl -OutFile $destFile
+    
+    $nppConfig = "$env:APPDATA\Notepad++\config.xml"
+    if (Test-Path $nppConfig) {
+        $xml = [xml](Get-Content $nppConfig)
+        $stylerTheme = $xml.NotepadPlus.GUIConfig | Where-Object { $_.name -eq "stylerTheme" }
+        if ($stylerTheme) {
+            $stylerTheme.path = $destFile
+            $xml.Save($nppConfig)
+            Write-Host "Dracula theme applied to Notepad++ config." -ForegroundColor Green
+        }
+    }
 }
 
 Cast-Spell "Opening the Chamber of Secrets (WSL Setup)"
