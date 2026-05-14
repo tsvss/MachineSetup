@@ -1,4 +1,3 @@
-# README.md
 # 🪄 MachineSetup: The Wizard's Repository
 
 Welcome to the automated setup repository for your development environments. This project uses magical automation (PowerShell & Bash) to transfigure a fresh machine into a powerful workstation.
@@ -31,22 +30,33 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 
 If you already have Git installed:
 
+1. **Clone the repository:**
+   ```powershell
+   git clone -b zero-touch-setup https://github.com/tsvss/MachineSetup.git
+   cd MachineSetup
+   ```
+2. **Run the central wizard:**
+   ```powershell
+   Set-ExecutionPolicy Bypass -Scope Process -Force
+   .\Start-Magic.ps1
+   ```
+
 ### **What's Inside?**
 
-- **Core Artifacts:** .NET 10 (Elder Wand), Java (Ancient Script), VS Code (Pensieve), Docker (Suitcase).
-- **WSL Chamber:** Ubuntu 24.04 with Zsh, Oh My Zsh, and shared Node tools.
-- **Enchantments:** Cascadia Code Nerd Font, synced VS Code settings, and Git configuration.
+- **Core Artifacts:** .NET 10 (Elder Wand), Java 25 (Ancient Script), VS Code (Pensieve), Docker (Suitcase).
+- **WSL Chamber:** Ubuntu 24.04 with Zsh, Oh My Zsh, and shared Node tools (Angular, Gemini CLI).
+- **Enchantments:** Cascadia Code Nerd Font, synced VS Code settings (Dracula), and Git configuration.
 - **Vaults:** Google Drive (Gringotts), 1Password (Secret Keeper).
 
 ---
 
 ## 📁 Repository Structure
 
-- `Profiles/`: Profile-specific setup scripts and configurations.
-- `Scripts/`: Shared magical helpers (Font installation, Config syncing).
-- `Fonts/`: The magical typefaces required for the terminal.
-- `TerminalSetup/`: Configuration for Windows Terminal and Oh My Posh.
-- `vsCodeSetup/`: Visual Studio Code settings and extensions.
+- `Profiles/`: Profile-specific setup scripts and configurations (e.g., Lucye).
+- `Shared/`: Shared magical assets (Fonts, Terminal themes, VS Code settings).
+- `Scripts/`: Reusable magical helpers (Font installation, Config syncing).
+- `bootstrap.ps1`: The initial spark for fresh machines.
+- `Start-Magic.ps1`: The central portal to select your profile.
 
 ---
 
