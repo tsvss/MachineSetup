@@ -150,6 +150,11 @@ function ignite() {
 
 # region Oh My Posh
 if [ -x "$(command -v oh-my-posh)" ]; then
-    eval "$(oh-my-posh init bash --config ~/.oh-my-posh-theme.json)"
+    current_shell=$(basename "$SHELL")
+    if [ "$current_shell" = "zsh" ]; then
+        eval "$(oh-my-posh init zsh --config ~/.oh-my-posh-theme.json)"
+    else
+        eval "$(oh-my-posh init bash --config ~/.oh-my-posh-theme.json)"
+    fi
 fi
 # endregion
