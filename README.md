@@ -17,17 +17,19 @@ We support multiple "wizarding" profiles to suit different environments:
 
 The Lucye setup is optimized for a full-stack developer working with .NET 10, Java, Python, Angular, and Cloud technologies.
 
-### **Summoning the Magic**
+### **The First Spell (Zero-Git Bootstrapping)**
 
-To start the setup on a fresh Windows machine (using default Windows PowerShell):
+On a brand-new machine without Git installed, you can bootstrap the entire setup with this single command in a **Windows PowerShell** (Administrator) window:
 
-1. Open PowerShell as **Administrator**.
-2. Run the following command:
-   ```powershell
-   Set-ExecutionPolicy Bypass -Scope Process -Force
-   cd E:\MachineSetup\Profiles\Lucye\Windows
-   .\Setup-Lucye.ps1
-   ```
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/tsvss/MachineSetup/zero-touch-setup/bootstrap.ps1'))
+```
+
+*This command downloads the bootstrapper, which fetches the full repository as a ZIP, extracts it, and launches the setup wizard automatically.*
+
+### **Manual Summoning**
+
+If you already have Git installed:
 
 ### **What's Inside?**
 
