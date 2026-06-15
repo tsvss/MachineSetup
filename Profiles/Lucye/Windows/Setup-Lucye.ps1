@@ -148,6 +148,8 @@ $apps = @(
     @{ Id = "Obsidian.Obsidian"; Name = "Obsidian" }
     @{ Id = "JanDeDobbeleer.OhMyPosh"; Name = "Oh My Posh" }
     @{ Id = "Microsoft.PowerShell"; Name = "PowerShell 7" }
+    @{ Id = "GitHub.GitHubDesktop"; Name = "GitHub Desktop" }
+    @{ Id = "Python.Python.3.13"; Name = "Python 3.13" }
 )
 
 foreach ($app in $apps) {

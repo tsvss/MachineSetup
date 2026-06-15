@@ -35,7 +35,7 @@ while ($true) {
     switch ($choice) {
         "1" { Invoke-Lucye; break }
         "2" { Write-Warning "Lysa is still brewing in the cauldron..."; Start-Sleep -Seconds 2 }
-        "3" { Write-Warning "The MacOS portal is not yet open..."; Start-Sleep -Seconds 2 }
+        "3" { Write-Host "`n🍎 To summon the Mac profile, please run 'Profiles/Lucye/MacOS/Setup-Lucye.sh' on your Mac." -ForegroundColor Cyan; Start-Sleep -Seconds 3 }
         "Q" { exit }
         default { Write-Error "Invalid selection!"; Start-Sleep -Seconds 1 }
     }

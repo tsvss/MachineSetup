@@ -10,13 +10,13 @@ We support multiple "wizarding" profiles to suit different environments:
 | :--- | :--- | :--- | :--- |
 | **Lucye** | Personal | Windows/WSL | 🧙‍♂️ Active |
 | **Lysa** | Work | Windows | 🧪 Brewing |
-| **MacOS** | General | macOS | 🧪 Brewing |
+| **Lucye** | Personal | Windows/WSL/MacOS | 🧙‍♂️ Active |
 
 ## 🪄 Lucye Setup (Personal)
 
 The Lucye setup is optimized for a full-stack developer working with .NET 10, Java, Python, Angular, and Cloud technologies.
 
-### **The First Spell (Zero-Git Bootstrapping)**
+### **Summoning on Windows (Zero-Git Bootstrapping)**
 
 On a brand-new machine without Git installed, you can bootstrap the entire setup with this single command in a **Windows PowerShell** (Administrator) window:
 
@@ -24,7 +24,16 @@ On a brand-new machine without Git installed, you can bootstrap the entire setup
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/tsvss/MachineSetup/zero-touch-setup/bootstrap.ps1'))
 ```
 
-*This command downloads the bootstrapper, which fetches the full repository as a ZIP, extracts it, and launches the setup wizard automatically.*
+### **Summoning on MacOS**
+
+For your Mac, open the Terminal and cast this spell:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/tsvss/MachineSetup/zero-touch-setup/Profiles/Lucye/MacOS/Setup-Lucye.sh)"
+```
+
+*Note: This will install Homebrew, summon all Core Artifacts, and configure Zsh/Oh My Zsh automatically.*
+
 
 ### **Manual Summoning**
 
