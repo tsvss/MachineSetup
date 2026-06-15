@@ -196,9 +196,9 @@ if (Get-Command wsl -ErrorAction SilentlyContinue) {
     # Mirror config to WSL
     $wslPath = "\\wsl.localhost\Ubuntu\home\$($env:USERNAME)"
     if (Test-Path $wslPath) {
-        Copy-Item "$repoRoot\Profiles\Lucye\WSL\wsl-setup.sh" -Destination "$wslPath/.wsl-setup.sh"
+        Copy-Item "$repoRoot\Shared\Scripts\shell-aliases.sh" -Destination "$wslPath/.shell-aliases.sh"
         Copy-Item "$repoRoot\Shared\TerminalSetup\ConfigFiles\oh-my-posh-theme.json" -Destination "$wslPath/.oh-my-posh-theme.json"
-        wsl -u $($env:USERNAME) sh -c 'if ! grep -q ".wsl-setup.sh" ~/.zshrc; then echo "source ~/.wsl-setup.sh" >> ~/.zshrc; fi'
+        wsl -u $($env:USERNAME) sh -c 'if ! grep -q ".shell-aliases.sh" ~/.zshrc; then echo "source ~/.shell-aliases.sh" >> ~/.zshrc; fi'
         wsl -u $($env:USERNAME) zsh -c 'source ~/.zshrc && curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell && export PATH=$HOME/.local/share/fnm:$PATH && fnm install --latest && fnm use default && npm install -g @angular/cli @google/gemini-cli'
     }
 }

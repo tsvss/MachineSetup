@@ -1,7 +1,7 @@
 #!/bin/zsh
-# Setup-Lucye.sh
-# 🧙‍♂️ The Lucye Mac Setup - A Wizarding World Experience
-# Targets: .NET 10, Java, Node.js, Angular, Gemini CLI, Google Drive, Zsh/Oh My Zsh
+# Setup-MacOS.sh
+# 🧙‍♂️ The MacOS Work Setup - A Professional Wizarding Experience
+# Targets: .NET 10, Java, Node.js, Angular, Gemini CLI, Slack, Teams, Outlook, Insomnia
 
 # --- Impeccable UX: Header & Progress ---
 function show_header() {
@@ -20,9 +20,8 @@ function show_header() {
                . `.:."`.;.`._ ^ _"-__..--__-"_  ^
         .       .. .. .. .. .. ..  ..  ..  ..
     
-    🪄  WELCOME TO THE LUCYE MAC SETUP WIZARD  🪄
-    "Happiness can be found even in the darkest of times, 
-     if one only remembers to turn on the terminal."
+    🪄  WELCOME TO THE MACOS WORK SETUP WIZARD  🪄
+    "Excellence is not a skill, it is a magical attitude."
 EOF
     echo -e "\033[0m"
 }
@@ -50,16 +49,17 @@ cast_spell "Summoning the Core Artifacts"
 casks=(
     visual-studio-code
     docker
-    google-drive
     1password
     warp
-    postman
+    insomnia
     google-chrome
     github
     ollama
     obsidian
-    vlc
-    zoom
+    microsoft-teams
+    microsoft-outlook
+    slack
+    pgadmin4
 )
 
 # Formulae
@@ -73,9 +73,7 @@ formulae=(
     terraform
     kubernetes-cli
     helm
-    azure-cli
     awscli
-    jandedobbeleer/oh-my-posh/oh-my-posh
 )
 
 brew update
@@ -102,9 +100,9 @@ fi
 
 # 5. Configurations & Fonts
 cast_spell "Enchanting the Environment"
-REPO_ROOT=$(dirname $(dirname $(dirname $(pwd))))
+REPO_ROOT=$(dirname $(dirname $(pwd)))
 
-# Fonts (Simplified for Mac)
+# Fonts
 cp "$REPO_ROOT/Shared/Fonts/CascadiaCode/"*.ttf ~/Library/Fonts/
 
 # VS Code Sync
@@ -146,11 +144,11 @@ for ext in "${extensions[@]}"; do
 done
 
 # 7. Mac Specific Magic (Aliases)
-cast_spell "Mirroring the Spellbook (Aliases)"
-cp "$REPO_ROOT/Profiles/Lucye/WSL/wsl-setup.sh" ~/.wsl-setup.sh
-if ! grep -q ".wsl-setup.sh" ~/.zshrc; then
-    echo "source ~/.wsl-setup.sh" >> ~/.zshrc
+cast_spell "Mirroring the Universal Spellbook (Aliases)"
+cp "$REPO_ROOT/Shared/Scripts/shell-aliases.sh" ~/.shell-aliases.sh
+if ! grep -q ".shell-aliases.sh" ~/.zshrc; then
+    echo "source ~/.shell-aliases.sh" >> ~/.zshrc
 fi
 
 echo -e "\n\033[32m🎆 ALL SPELLS CAST SUCCESSFULLY! 🎆\033[0m"
-echo -e "\033[33mYour Lucye Mac environment is now impeccable.\033[0m"
+echo -e "\033[33mYour MacOS Work environment is now impeccable.\033[0m"

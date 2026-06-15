@@ -1,6 +1,6 @@
 #!/bin/bash
-# wsl-setup.sh
-# Setup aliases for WSL Ubuntu mirroring the PowerShell profile
+# shell-aliases.sh
+# Universal shell aliases and helpers for WSL, MacOS, and Linux
 
 # region Navigation & FS helpers
 alias ..='cd ..'

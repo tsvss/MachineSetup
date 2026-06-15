@@ -10,11 +10,11 @@ We support multiple "wizarding" profiles to suit different environments:
 | :--- | :--- | :--- | :--- |
 | **Lucye** | Personal | Windows/WSL | 🧙‍♂️ Active |
 | **Lysa** | Work | Windows | 🧪 Brewing |
-| **Lucye** | Personal | Windows/WSL/MacOS | 🧙‍♂️ Active |
+| **MacOS** | Work | MacOS | 🧙‍♂️ Active |
 
-## 🪄 Lucye Setup (Personal)
+## 🪄 Lucye Setup (Personal Windows)
 
-The Lucye setup is optimized for a full-stack developer working with .NET 10, Java, Python, Angular, and Cloud technologies.
+The Lucye setup is optimized for a full-stack developer working with .NET 10, Java, Python, Angular, and Cloud technologies on Windows and WSL.
 
 ### **Summoning on Windows (Zero-Git Bootstrapping)**
 
@@ -24,15 +24,19 @@ On a brand-new machine without Git installed, you can bootstrap the entire setup
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/tsvss/MachineSetup/zero-touch-setup/bootstrap.ps1'))
 ```
 
+## 🪄 MacOS Setup (Professional Work)
+
+The MacOS setup is a professional wizard's kit for work, including Teams, Outlook, Slack, and professional database tools.
+
 ### **Summoning on MacOS**
 
 For your Mac, open the Terminal and cast this spell:
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/tsvss/MachineSetup/zero-touch-setup/Profiles/Lucye/MacOS/Setup-Lucye.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/tsvss/MachineSetup/zero-touch-setup/Profiles/MacOS/Setup-MacOS.sh)"
 ```
 
-*Note: This will install Homebrew, summon all Core Artifacts, and configure Zsh/Oh My Zsh automatically.*
+*Note: This will install Homebrew, summon professional Artifacts (Teams, Slack, etc.), and configure Zsh/Oh My Zsh automatically.*
 
 
 ### **Manual Summoning**

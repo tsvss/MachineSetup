@@ -12,9 +12,9 @@ function Show-Menu {
     "Choose your path, for the environment you select 
      will define the magic you create."
 
-    [1] Lucye (Personal Setup - .NET 10, Java, Full-Stack)
-    [2] Lysa  (Work Setup - Coming Soon)
-    [3] MacOS (General Setup - Coming Soon)
+    [1] Lucye (Personal Windows Setup - .NET 10, Java, Full-Stack)
+    [2] Lysa  (Work Windows Setup - Coming Soon)
+    [3] MacOS (Professional Work Setup - Teams, Outlook, Slack)
     [Q] Quit
 
 "@ -ForegroundColor Yellow
@@ -35,7 +35,7 @@ while ($true) {
     switch ($choice) {
         "1" { Invoke-Lucye; break }
         "2" { Write-Warning "Lysa is still brewing in the cauldron..."; Start-Sleep -Seconds 2 }
-        "3" { Write-Host "`n🍎 To summon the Mac profile, please run 'Profiles/Lucye/MacOS/Setup-Lucye.sh' on your Mac." -ForegroundColor Cyan; Start-Sleep -Seconds 3 }
+        "3" { Write-Host "`n🍎 To summon the MacOS Professional profile, please run 'Profiles/MacOS/Setup-MacOS.sh' on your Mac." -ForegroundColor Cyan; Start-Sleep -Seconds 3 }
         "Q" { exit }
         default { Write-Error "Invalid selection!"; Start-Sleep -Seconds 1 }
     }
