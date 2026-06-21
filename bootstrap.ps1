@@ -12,7 +12,7 @@ if (Test-Path $tempDir) { Remove-Item $tempDir -Recurse -Force }
 New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
 
 Write-Host "✨ Summoning the full repository archive..." -ForegroundColor Cyan
-Invoke-WebRequest -Uri $repoUrl -OutFile $zipPath
+Invoke-WebRequest -Uri $repoUrl -OutFile $zipPath -UseBasicParsing
 
 Write-Host "📦 Extracting the magical artifacts..." -ForegroundColor Yellow
 Expand-Archive -Path $zipPath -DestinationPath $tempDir -Force

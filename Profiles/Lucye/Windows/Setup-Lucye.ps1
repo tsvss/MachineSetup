@@ -1,4 +1,4 @@
-﻿# Setup-Lucye.ps1
+# Setup-Lucye.ps1
 # ðŸ§™â€â™‚ï¸ The Lucye Machine Setup - A Wizarding World Experience
 # Targets: .NET 10, Java, Node.js, Angular, Gemini CLI, Google Drive, WSL (Zsh/Oh My Zsh)
 
@@ -268,7 +268,7 @@ Cast-Spell "Enchanting Notepad++ with Dracula"
 $nppThemeDir = "$env:APPDATA\Notepad++\themes"
 if (Test-Path $nppThemeDir) {
     $draculaUrl = "https://raw.githubusercontent.com/dracula/notepad-plus-plus/master/generated/Dracula.xml"
-    Invoke-WebRequest -Uri $draculaUrl -OutFile (Join-Path $nppThemeDir "Dracula.xml")
+    Invoke-WebRequest -Uri $draculaUrl -OutFile (Join-Path $nppThemeDir "Dracula.xml") -UseBasicParsing
 }
 
 # 7. WSL Zsh/Oh My Zsh
