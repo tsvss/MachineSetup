@@ -1,5 +1,5 @@
-# Setup-Lucye.ps1
-# 🧙‍♂️ The Lucye Machine Setup - A Wizarding World Experience
+﻿# Setup-Lucye.ps1
+# ðŸ§™â€â™‚ï¸ The Lucye Machine Setup - A Wizarding World Experience
 # Targets: .NET 10, Java, Node.js, Angular, Gemini CLI, Google Drive, WSL (Zsh/Oh My Zsh)
 
 $ErrorActionPreference = "Stop"
@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 function Check-MuggleStatus {
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
     if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
-        Write-Host "✨ Ministry Authorization required. Elevating script..." -ForegroundColor Cyan
+        Write-Host "âœ¨ Ministry Authorization required. Elevating script..." -ForegroundColor Cyan
         $arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$($PSCommandPath)`""
         Start-Process powershell -Verb runAs -ArgumentList $arguments
         exit
@@ -37,7 +37,7 @@ function Show-Header {
                . `.:."`.;.`._ ^ _"-__..--__-"_  ^
         .       .. .. .. .. .. ..  ..  ..  ..
     
-    🪄  WELCOME TO THE LUCYE MACHINE SETUP WIZARD  🪄
+    ðŸª„  WELCOME TO THE LUCYE MACHINE SETUP WIZARD  ðŸª„
     "Happiness can be found even in the darkest of times, 
      if one only remembers to turn on the terminal."
 "@ -ForegroundColor Yellow
@@ -45,7 +45,7 @@ function Show-Header {
 
 function Cast-Spell {
     param([string]$Message)
-    Write-Host "`n✨ Casting Spell: $Message..." -ForegroundColor Cyan
+    Write-Host "`nâœ¨ Casting Spell: $Message..." -ForegroundColor Cyan
     Start-Sleep -Milliseconds 500
 }
 
@@ -86,7 +86,7 @@ function Enable-MagicalFeatures {
     if ($rebootNeeded) {
         Set-AutoResume
         Play-Chime -Type 2
-        Write-Host "`n🚨 REBOOT REQUIRED: The environment must restart to solidify the magic." -ForegroundColor Yellow
+        Write-Host "`nðŸš¨ REBOOT REQUIRED: The environment must restart to solidify the magic." -ForegroundColor Yellow
         Write-Host "The setup will automatically resume once you log back in." -ForegroundColor Cyan
         $confirm = Read-Host "Restart now? (Y/N)"
         if ($confirm -eq 'Y') { Restart-Computer }
@@ -96,7 +96,7 @@ function Enable-MagicalFeatures {
 
 function Transfigure-App {
     param([string]$Id, [string]$Name, [string]$Override)
-    Write-Host "📜 Preparing scroll for $Name..." -ForegroundColor Gray
+    Write-Host "ðŸ“œ Preparing scroll for $Name..." -ForegroundColor Gray
     if ($Override) {
         & winget install --id $Id -e --accept-package-agreements --accept-source-agreements --silent --override $Override
     } else {
@@ -150,15 +150,39 @@ $apps = @(
     @{ Id = "Microsoft.PowerShell"; Name = "PowerShell 7" }
     @{ Id = "GitHub.GitHubDesktop"; Name = "GitHub Desktop" }
     @{ Id = "Python.Python.3.13"; Name = "Python 3.13" }
+    @{ Id = "GoLang.Go"; Name = "Go" }
+    @{ Id = "Amazon.AWSCLI"; Name = "AWS CLI" }
+    @{ Id = "Kubernetes.minikube"; Name = "Minikube" }
+    @{ Id = "Helm.Helm"; Name = "Helm" }
+    @{ Id = "Anthropic.Claude"; Name = "Claude" }
+    @{ Id = "Notion.Notion"; Name = "Notion" }
+    @{ Id = "JetBrains.WebStorm"; Name = "WebStorm" }
+    @{ Id = "GnuPG.Gpg4win"; Name = "Gpg4win" }
+    @{ Id = "Microsoft.VisualStudio.Community"; Name = "Visual Studio 2026 Community" }
+    @{ Id = "VideoLAN.VLC"; Name = "VLC" }
+    @{ Id = "Microsoft.Teams"; Name = "Microsoft Teams" }
 )
 
 foreach ($app in $apps) {
     Transfigure-App -Id $app.Id -Name $app.Name -Override $app.Override
 }
 
-# 3. Node & Global Tools
-Cast-Spell "Brewing Node.js Potions"
-if (-not (Get-Command fnm -ErrorAction SilentlyContinue)) { choco install fnm -y }
+# 3. Fast Node Manager & Other Command Line Tools
+Cast-Spell "Brewing Chocolatey Potions"
+$chocoApps = @(
+    @{ Id = "fnm"; Command = "fnm" }
+    @{ Id = "jq"; Command = "jq" }
+    @{ Id = "k3d"; Command = "k3d" }
+    @{ Id = "k9s"; Command = "k9s" }
+    @{ Id = "kubernetes-cli"; Command = "kubectl" }
+    @{ Id = "terraform"; Command = "terraform" }
+    @{ Id = "terraformer"; Command = "terraformer" }
+)
+foreach ($app in $chocoApps) {
+    if (-not (Get-Command $app.Command -ErrorAction SilentlyContinue)) {
+        choco install $app.Id -y
+    }
+}
 $env:PATH += ";$env:APPDATA\fnm"
 & fnm install --latest
 & fnm use default
@@ -172,7 +196,71 @@ $repoRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.FullName
 
 # 5. VS Code Extensions
 Cast-Spell "Installing VS Code Extensions"
-$extensions = @("dracula-theme.theme-dracula", "amazonwebservices.amazon-q-vscode", "ms-dotnettools.csdevkit", "ms-dotnettools.csharp", "dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "aaron-bond.better-comments", "formulahendry.auto-rename-tag", "naumovs.color-highlight", "anteprimorac.html-end-tag-labels", "github.vscode-pull-request-github", "eamodio.gitlens", "angular.ng-template", "ms-playwright.playwright", "yzhang.markdown-all-in-one", "davidanson.vscode-markdownlint", "rangav.vscode-thunder-client")
+$extensions = @(
+    "4ops.terraform",
+    "aaron-bond.better-comments",
+    "aliasadidev.nugetpackagemanagergui",
+    "amazonwebservices.amazon-q-vscode",
+    "analogjs.vscode-analog",
+    "angular.ng-template",
+    "anteprimorac.html-end-tag-labels",
+    "davidanson.vscode-markdownlint",
+    "dbaeumer.vscode-eslint",
+    "docker.docker",
+    "dotjoshjohnson.xml",
+    "dracula-theme.theme-dracula",
+    "eamodio.gitlens",
+    "eriklynd.json-tools",
+    "esbenp.prettier-vscode",
+    "fernandoescolar.vscode-solution-explorer",
+    "formulahendry.auto-rename-tag",
+    "geeebe.duplicate",
+    "github.copilot",
+    "github.copilot-chat",
+    "github.remotehub",
+    "github.vscode-github-actions",
+    "github.vscode-pull-request-github",
+    "grapecity.gc-excelviewer",
+    "hashicorp.terraform",
+    "hbenl.vscode-jasmine-test-adapter",
+    "hbenl.vscode-test-explorer",
+    "johnpapa.angular-essentials",
+    "johnpapa.angular2",
+    "johnpapa.vscode-peacock",
+    "johnpapa.winteriscoming",
+    "knisterpeter.vscode-commitizen",
+    "lucono.karma-test-explorer",
+    "mechatroner.rainbow-csv",
+    "mikeburgh.xml-format",
+    "mintlify.document",
+    "ms-azuretools.vscode-containers",
+    "ms-azuretools.vscode-docker",
+    "ms-dotnettools.csdevkit",
+    "ms-dotnettools.csharp",
+    "ms-dotnettools.vscode-dotnet-runtime",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "ms-playwright.playwright",
+    "ms-python.debugpy",
+    "ms-python.isort",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.vscode-python-envs",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode-remote.remote-wsl",
+    "ms-vscode.azure-repos",
+    "ms-vscode.powershell",
+    "ms-vscode.remote-repositories",
+    "ms-vscode.test-adapter-converter",
+    "nativescript.nativescript",
+    "naumovs.color-highlight",
+    "pkief.material-icon-theme",
+    "rangav.vscode-thunder-client",
+    "redhat.vscode-yaml",
+    "streetsidesoftware.code-spell-checker",
+    "stylelint.vscode-stylelint",
+    "tonybaloney.vscode-pets",
+    "yzhang.markdown-all-in-one"
+)
 foreach ($ext in $extensions) { & code --install-extension $ext --force }
 
 # 6. Notepad++ Dracula
@@ -204,5 +292,5 @@ if (Get-Command wsl -ErrorAction SilentlyContinue) {
 }
 
 Play-Chime -Type 1
-Write-Host "`n🎆 ALL SPELLS CAST SUCCESSFULLY! 🎆" -ForegroundColor Green
+Write-Host "`nðŸŽ† ALL SPELLS CAST SUCCESSFULLY! ðŸŽ†" -ForegroundColor Green
 Write-Host "Your Lucye environment is now impeccable." -ForegroundColor Yellow

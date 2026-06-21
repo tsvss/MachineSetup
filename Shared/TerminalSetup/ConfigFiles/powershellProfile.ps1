@@ -1,4 +1,4 @@
-using namespace System.Management.Automation
+﻿using namespace System.Management.Automation
 using namespace System.Management.Automation.Language
  
 if ($host.Name -eq 'ConsoleHost') {
@@ -61,13 +61,13 @@ function ...... {
  rmf .\dist
 #>
 function rmf{
-    Write-Host "🗑️ Removing: $args (recursive, force)" -ForegroundColor Yellow
+    Write-Host "ðŸ—‘ï¸ Removing: $args (recursive, force)" -ForegroundColor Yellow
     try {
         Remove-Item -Path "$args" -Recurse -Force -ErrorAction Stop
-        Write-Host "✅ Removed: $args" -ForegroundColor Green
+        Write-Host "âœ… Removed: $args" -ForegroundColor Green
     }
     catch {
-        Write-Host "❌ Failed to remove: $args. $_" -ForegroundColor Red
+        Write-Host "âŒ Failed to remove: $args. $_" -ForegroundColor Red
         throw
     }
 }
@@ -81,8 +81,8 @@ function rmf{
  nf MyApp
 #>
 function nf ($name){
-     Write-Host "📁 Creating and switching to new folder: $name" -ForegroundColor Cyan
-     mkdir $name | Set-Location $name
+     Write-Host "ðŸ“ Creating and switching to new folder: $name" -ForegroundColor Cyan
+     mkdir $name; Set-Location $name
 }
 
 <#
@@ -92,7 +92,7 @@ function nf ($name){
  projects
 #>
 function projects{
-    Write-Host "📂 Switching to project root (Dev Drive): $Global:ProjectRoot" -ForegroundColor Cyan
+    Write-Host "ðŸ“‚ Switching to project root (Dev Drive): $Global:ProjectRoot" -ForegroundColor Cyan
     dev
 }
 
@@ -111,7 +111,7 @@ function dev {
     if (Test-Path $driveLetter) {
         Set-Location $driveLetter
     } else {
-        Write-Host "💽 Dev drive ($driveLetter) not found. Mounting Dev Drive..." -ForegroundColor Yellow
+        Write-Host "ðŸ’½ Dev drive ($driveLetter) not found. Mounting Dev Drive..." -ForegroundColor Yellow
         Mount-VHD -Path $vhdPath -ErrorAction SilentlyContinue
 
         # Wait a moment for the drive to be available
@@ -120,7 +120,7 @@ function dev {
         if (Test-Path $driveLetter) {
             Set-Location $driveLetter
         } else {
-            Write-Host "❌ Failed to mount Dev drive ($vhdPath). Please check manually." -ForegroundColor Red
+            Write-Host "âŒ Failed to mount Dev drive ($vhdPath). Please check manually." -ForegroundColor Red
         }
     }
 }
@@ -138,7 +138,7 @@ function dev {
  gswitch feature/xyz
 #>
 function gswitch {
-    Write-Host "🔀 Switching to branch: $args" -ForegroundColor Cyan
+    Write-Host "ðŸ”€ Switching to branch: $args" -ForegroundColor Cyan
     git switch $args
 }
 
@@ -151,7 +151,7 @@ function gswitch {
  gb feature/xyz
 #>
 function gb {
-    Write-Host "🌱 Creating and switching to new branch: $args" -ForegroundColor Cyan
+    Write-Host "ðŸŒ± Creating and switching to new branch: $args" -ForegroundColor Cyan
     git checkout -b $args
 }
  
@@ -164,7 +164,7 @@ function gb {
  gbt 1234
 #>
 function gbt ([string] $taskid) {
-    Write-Host "🧩 Creating and switching to new task branch: task/$taskid" -ForegroundColor Cyan
+    Write-Host "ðŸ§© Creating and switching to new task branch: task/$taskid" -ForegroundColor Cyan
     git checkout -b "task/$taskid"
 }
 
@@ -177,7 +177,7 @@ function gbt ([string] $taskid) {
  gs main
 #>
 function gs {
-    Write-Host "🔁 Checking out '$args' and pulling latest ⬇️..." -ForegroundColor Cyan
+    Write-Host "ðŸ” Checking out '$args' and pulling latest â¬‡ï¸..." -ForegroundColor Cyan
     git checkout $args
     git pull
 }
@@ -221,9 +221,9 @@ function gdev {
  grb main
 #>
 function grb {
-    Write-Host "⬇️  Fetching from origin..." -ForegroundColor Cyan
+    Write-Host "â¬‡ï¸  Fetching from origin..." -ForegroundColor Cyan
     git fetch
-    Write-Host "🔁 Rebasing current branch onto origin/$args..." -ForegroundColor Yellow
+    Write-Host "ðŸ” Rebasing current branch onto origin/$args..." -ForegroundColor Yellow
     git rebase origin/$args
 }
  
@@ -246,13 +246,13 @@ function gco {
         [Parameter(Position = 1)]
         [string] $Description
     )
-    Write-Host "📦 Staging all changes..." -ForegroundColor DarkCyan
+    Write-Host "ðŸ“¦ Staging all changes..." -ForegroundColor DarkCyan
     git add .
     if ($PSBoundParameters.ContainsKey('Description') -and $null -ne $Description -and $Description -ne '') {
-        Write-Host "📝 Committing: $Summary (with description)" -ForegroundColor Green
+        Write-Host "ðŸ“ Committing: $Summary (with description)" -ForegroundColor Green
         git commit -m $Summary -m $Description
     } else {
-        Write-Host "📝 Committing: $Summary" -ForegroundColor Green
+        Write-Host "ðŸ“ Committing: $Summary" -ForegroundColor Green
         git commit -m $Summary
     }
 }
@@ -264,7 +264,7 @@ function gco {
  goblivion
 #>
 function goblivion {
-    Write-Host "⚠️🧹 Deleting all local branches except those containing 'main'." -ForegroundColor Yellow
+    Write-Host "âš ï¸ðŸ§¹ Deleting all local branches except those containing 'main'." -ForegroundColor Yellow
     git branch | Where-Object { $_ -notlike "*main*" } | ForEach-Object { git branch -D $_.Trim() }
 }
  
@@ -545,7 +545,7 @@ function gwf {
  gpu
 #>
 function gpu {
-    Write-Host "⬇️  Pulling latest changes from current branch upstream..." -ForegroundColor Cyan
+    Write-Host "â¬‡ï¸  Pulling latest changes from current branch upstream..." -ForegroundColor Cyan
     git pull
 }
  
@@ -580,15 +580,15 @@ function goops {
 
     git add .
     if ($PSBoundParameters.ContainsKey('Message') -and $null -ne $Message -and $Message -ne '') {
-        Write-Host "✏️ Amending last commit (with new message)..." -ForegroundColor Yellow
+        Write-Host "âœï¸ Amending last commit (with new message)..." -ForegroundColor Yellow
         git commit --amend -m $Message
     }
     elseif ($Edit) {
-        Write-Host "✏️ Amending last commit (editing message)..." -ForegroundColor Yellow
+        Write-Host "âœï¸ Amending last commit (editing message)..." -ForegroundColor Yellow
         git commit --amend
     }
     else {
-        Write-Host "✏️ Amending last commit (message unchanged)..." -ForegroundColor Yellow
+        Write-Host "âœï¸ Amending last commit (message unchanged)..." -ForegroundColor Yellow
         git commit --amend --no-edit
     }
 }
@@ -600,7 +600,7 @@ function goops {
  gfp
 #>
 function gfp {
-    Write-Host "🚀🛡️ Force pushing with lease to protect remote updates..." -ForegroundColor Yellow
+    Write-Host "ðŸš€ðŸ›¡ï¸ Force pushing with lease to protect remote updates..." -ForegroundColor Yellow
     git push --force-with-lease
 }
 
@@ -617,10 +617,10 @@ function gpush {
     if ($result -match "refs/heads/$currentBranch") {
         git push
     } else {
-        Write-Host "📡 Publishing current branch ($currentBranch) to origin" -ForegroundColor Cyan
+        Write-Host "ðŸ“¡ Publishing current branch ($currentBranch) to origin" -ForegroundColor Cyan
         git push --set-upstream origin $currentBranch
     }   
-    Write-Host "✅📤 Changes pushed to origin/$currentBranch" -ForegroundColor Green
+    Write-Host "âœ…ðŸ“¤ Changes pushed to origin/$currentBranch" -ForegroundColor Green
 }
  
 <#
@@ -630,7 +630,7 @@ function gpush {
  gr
 #>
 function gr {
-    Write-Host "🚨 DANGER: Hard resetting and cleaning untracked files/folders." -ForegroundColor Red
+    Write-Host "ðŸš¨ DANGER: Hard resetting and cleaning untracked files/folders." -ForegroundColor Red
     git reset --hard
     git clean -f -d
 }
@@ -642,7 +642,7 @@ function gr {
  howdy
 #>
 function howdy {
-    Write-Host "📋 Git status:" -ForegroundColor Cyan
+    Write-Host "ðŸ“‹ Git status:" -ForegroundColor Cyan
     git status
 }
 
@@ -662,7 +662,7 @@ function ignite {
         [int]$port
     )
 
-    Write-Host "Igniting Angular server... 🚀" -ForegroundColor Green
+    Write-Host "Igniting Angular server... ðŸš€" -ForegroundColor Green
 
     if ($port) {
         ng serve --ssl --ssl-key $Global:SslKeyPath --ssl-cert $Global:SslCertPath --port $port
@@ -1346,58 +1346,58 @@ Set-PSReadLineKeyHandler -Key Ctrl+Shift+t `
  Show-ProfileCapabilities
 #>
 function Show-ProfileCapabilities {
-    Write-Host ""; Write-Host "✨ Profile Capabilities ✨" -ForegroundColor Green
+    Write-Host ""; Write-Host "âœ¨ Profile Capabilities âœ¨" -ForegroundColor Green
 
     # Navigation & Filesystem
-    Write-Host "`n📁 [Navigation & Filesystem]" -ForegroundColor Magenta
-    Write-Host "  Example: ↩️  ..                           -> Up one directory" -ForegroundColor Cyan
-    Write-Host "  Example: ↩️  ....                         -> Up two directories" -ForegroundColor Cyan
-    Write-Host "  Example: ↩️  ......                       -> Up three directories" -ForegroundColor Cyan
-    Write-Host "  Example: 📁 nf MyApp                     -> Create folder 'MyApp' and cd into it" -ForegroundColor Cyan
-    Write-Host "  Example: 🗑️ rmf .\dist                    -> Force remove folder/file recursively" -ForegroundColor Cyan
-    Write-Host "  Example: 💽 dev                           -> Mount VHD and jump to $Global:DevDriveLetter" -ForegroundColor Cyan
-    Write-Host "  Example: 📂 projects                      -> Jump to $Global:ProjectRoot" -ForegroundColor Cyan
+    Write-Host "`nðŸ“ [Navigation & Filesystem]" -ForegroundColor Magenta
+    Write-Host "  Example: â†©ï¸  ..                           -> Up one directory" -ForegroundColor Cyan
+    Write-Host "  Example: â†©ï¸  ....                         -> Up two directories" -ForegroundColor Cyan
+    Write-Host "  Example: â†©ï¸  ......                       -> Up three directories" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ“ nf MyApp                     -> Create folder 'MyApp' and cd into it" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ—‘ï¸ rmf .\dist                    -> Force remove folder/file recursively" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ’½ dev                           -> Mount VHD and jump to $Global:DevDriveLetter" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ“‚ projects                      -> Jump to $Global:ProjectRoot" -ForegroundColor Cyan
 
     # Git basics
-    Write-Host "`n🌿 [Git: Branch & Sync]" -ForegroundColor Magenta
-    Write-Host "  Example: 🔀 gswitch feature/x             -> git switch feature/x" -ForegroundColor Cyan
-    Write-Host "  Example: 🌱 gb feature/x                  -> git checkout -b feature/x" -ForegroundColor Cyan
-    Write-Host "  Example: 🧩 gbt 1234                      -> git checkout -b task/1234" -ForegroundColor Cyan
-    Write-Host "  Example: 🔁 gs main                       -> checkout 'main' then pull" -ForegroundColor Cyan
-    Write-Host "  Example: 🧭 gmaster|gmain|gdev            -> quick switch and pull" -ForegroundColor Cyan
-    Write-Host "  Example: 🔁 grb main                      -> fetch then rebase onto origin/main" -ForegroundColor Cyan
-    Write-Host "  Example: ⬇️  gpu                            -> git pull" -ForegroundColor Cyan
-    Write-Host "  Example: 📤 gpush                          -> push (creates upstream if needed)" -ForegroundColor Cyan
-    Write-Host "  Example: 🚀🛡️ gfp                             -> force push with lease" -ForegroundColor Cyan
-    Write-Host "  Example: 🚨 gr                              -> HARD reset and clean (dangerous)" -ForegroundColor Cyan
-    Write-Host "  Example: ⚠️🧹 goblivion                      -> Delete all local branches except ones containing 'main' (dangerous)" -ForegroundColor Yellow
-    Write-Host "  Example: 📋 howdy                          -> git status" -ForegroundColor Cyan
+    Write-Host "`nðŸŒ¿ [Git: Branch & Sync]" -ForegroundColor Magenta
+    Write-Host "  Example: ðŸ”€ gswitch feature/x             -> git switch feature/x" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸŒ± gb feature/x                  -> git checkout -b feature/x" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ§© gbt 1234                      -> git checkout -b task/1234" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ” gs main                       -> checkout 'main' then pull" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ§­ gmaster|gmain|gdev            -> quick switch and pull" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ” grb main                      -> fetch then rebase onto origin/main" -ForegroundColor Cyan
+    Write-Host "  Example: â¬‡ï¸  gpu                            -> git pull" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ“¤ gpush                          -> push (creates upstream if needed)" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸš€ðŸ›¡ï¸ gfp                             -> force push with lease" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸš¨ gr                              -> HARD reset and clean (dangerous)" -ForegroundColor Cyan
+    Write-Host "  Example: âš ï¸ðŸ§¹ goblivion                      -> Delete all local branches except ones containing 'main' (dangerous)" -ForegroundColor Yellow
+    Write-Host "  Example: ðŸ“‹ howdy                          -> git status" -ForegroundColor Cyan
 
     # Git commits
-    Write-Host "`n📝 [Git: Commits]" -ForegroundColor Magenta
-    Write-Host "  Example: 📝 gco -Summary 'fix: bug' -Description 'details'" -ForegroundColor Cyan
+    Write-Host "`nðŸ“ [Git: Commits]" -ForegroundColor Magenta
+    Write-Host "  Example: ðŸ“ gco -Summary 'fix: bug' -Description 'details'" -ForegroundColor Cyan
     Write-Host "           -> Stage all and commit with summary and optional description" -ForegroundColor Gray
-    Write-Host "  Example: 🧱 gfeat -Scope core -Summary 'add X' -Description 'Y' (also: gfix, gtest, gdocs, gstyle, grefactor, gperf, gchore, gwf)" -ForegroundColor Cyan
+    Write-Host "  Example: ðŸ§± gfeat -Scope core -Summary 'add X' -Description 'Y' (also: gfix, gtest, gdocs, gstyle, grefactor, gperf, gchore, gwf)" -ForegroundColor Cyan
     Write-Host "           -> Conventional commit with optional scope" -ForegroundColor Gray
-    Write-Host "  Example: ✏️ goops                          -> Amend last commit without changing message" -ForegroundColor Cyan
-    Write-Host "  Example: ✏️ goops -Edit                    -> Amend and edit the message" -ForegroundColor Cyan
-    Write-Host "  Example: ✏️ goops -Message 'fix: adjust API URL' -> Amend with new message" -ForegroundColor Cyan
+    Write-Host "  Example: âœï¸ goops                          -> Amend last commit without changing message" -ForegroundColor Cyan
+    Write-Host "  Example: âœï¸ goops -Edit                    -> Amend and edit the message" -ForegroundColor Cyan
+    Write-Host "  Example: âœï¸ goops -Message 'fix: adjust API URL' -> Amend with new message" -ForegroundColor Cyan
 
     # Angular
-    Write-Host "`n🅰️ [Angular]" -ForegroundColor Magenta
-    Write-Host "  Example: 🚀 ignite -port 4200              -> ng serve with SSL certs on port 4200" -ForegroundColor Cyan
+    Write-Host "`nðŸ…°ï¸ [Angular]" -ForegroundColor Magenta
+    Write-Host "  Example: ðŸš€ ignite -port 4200              -> ng serve with SSL certs on port 4200" -ForegroundColor Cyan
 
     # Key bindings (PSReadLine)
-    Write-Host "`n⌨️ [Key Bindings]" -ForegroundColor Magenta
-    Write-Host "  Press F7                                -> 🗂️  Interactive history viewer" -ForegroundColor Cyan
-    Write-Host "  Ctrl+J (mark) / Ctrl+j (jump)          -> 🏷️  Mark & jump to directories" -ForegroundColor Cyan
-    Write-Host "  Alt+a                                   -> 🔤 Select next command argument" -ForegroundColor Cyan
-    Write-Host "  RightArrow at EOL                       -> ➡️  Accept next suggestion word" -ForegroundColor Cyan
+    Write-Host "`nâŒ¨ï¸ [Key Bindings]" -ForegroundColor Magenta
+    Write-Host "  Press F7                                -> ðŸ—‚ï¸  Interactive history viewer" -ForegroundColor Cyan
+    Write-Host "  Ctrl+J (mark) / Ctrl+j (jump)          -> ðŸ·ï¸  Mark & jump to directories" -ForegroundColor Cyan
+    Write-Host "  Alt+a                                   -> ðŸ”¤ Select next command argument" -ForegroundColor Cyan
+    Write-Host "  RightArrow at EOL                       -> âž¡ï¸  Accept next suggestion word" -ForegroundColor Cyan
 
     # Argument completers
-    Write-Host "`n🔌 [Argument Completers]" -ForegroundColor Magenta
+    Write-Host "`nðŸ”Œ [Argument Completers]" -ForegroundColor Magenta
     Write-Host "  winget and dotnet provide native completions" -ForegroundColor Cyan
 
-    Write-Host "`n💡 Tip: Use Get-Help <function> -Detailed for usage & examples." -ForegroundColor Green
+    Write-Host "`nðŸ’¡ Tip: Use Get-Help <function> -Detailed for usage & examples." -ForegroundColor Green
 }
 #endregion Profile Capabilities
