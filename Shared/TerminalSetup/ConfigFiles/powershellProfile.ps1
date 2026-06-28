@@ -20,6 +20,11 @@ $Global:SslKeyPath        = 'd:\SSLCert\localhost.key'
 $Global:SslCertPath       = 'd:\SSLCert\localhost.crt'
 #endregion Profile Settings
 
+# Silently mount Dev Drive if not already available (fallback — login task handles this at boot)
+if (-not (Test-Path $Global:DevDriveLetter)) {
+    try { Mount-VHD -Path $Global:DevVhdPath -ErrorAction Stop | Out-Null } catch {}
+}
+
 oh-my-posh --init --shell pwsh --config $Global:OhMyPoshThemePath | Invoke-Expression
 fnm env --use-on-cd | Out-String | Invoke-Expression
 

@@ -431,6 +431,23 @@ $repoRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.FullName
 & "$repoRoot\Scripts\Install-Fonts.ps1"
 & "$repoRoot\Scripts\Configure-Configs.ps1"
 
+# Register Dev Drive auto-mount at Windows login (so E: is ready before any terminal opens)
+Cast-Spell "Registering Dev Drive auto-mount login task"
+try {
+    $devVhdPath = 'D:\VHD\DevDrive.vhdx'
+    $pwshExe = Join-Path $env:ProgramFiles "PowerShell\7\pwsh.exe"
+    if (-not (Test-Path $pwshExe)) { $pwshExe = "powershell.exe" }
+    $mountCmd = "Mount-VHD -Path '$devVhdPath' -ErrorAction SilentlyContinue"
+    $taskAction   = New-ScheduledTaskAction -Execute $pwshExe -Argument "-WindowStyle Hidden -NonInteractive -Command `"$mountCmd`""
+    $taskTrigger  = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
+    $taskSettings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit (New-TimeSpan -Minutes 2) -MultipleInstances IgnoreNew
+    Register-ScheduledTask -TaskName "Lucye-MountDevDrive" -Action $taskAction -Trigger $taskTrigger -Settings $taskSettings `
+        -Description "Auto-mount Lucye Dev VHD (E:) at login" -RunLevel Highest -Force | Out-Null
+    Write-Host "   $([char]0x2705) Dev Drive (E:) will auto-mount at next login." -ForegroundColor Green
+} catch {
+    Write-Host "   $([char]0x26A0) Could not register auto-mount task: $_" -ForegroundColor Yellow
+}
+
 # 5. VS Code Extensions
 Cast-Spell "Installing VS Code Extensions"
 $extensions = @(
