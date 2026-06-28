@@ -17,8 +17,12 @@ function nf() {
     mkdir -p "$1" && cd "$1"
 }
 
-# Adaptation for Windows drives in WSL
-PROJECT_ROOT="/mnt/e"
+# Project root differs by OS: VHD mount on Windows/WSL, ~/Developer on macOS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    PROJECT_ROOT="$HOME/Developer"
+else
+    PROJECT_ROOT="/mnt/e"
+fi
 alias projects="cd $PROJECT_ROOT && echo '📂 Switched to project root: $PROJECT_ROOT'"
 alias dev="cd $PROJECT_ROOT && echo '💽 Switched to dev drive root: $PROJECT_ROOT'"
 
