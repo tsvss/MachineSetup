@@ -100,6 +100,50 @@ function Clear-AutoResume {
     }
 }
 
+# --- Setup Result Tracking ---
+$Script:SetupResults = [System.Collections.ArrayList]@()
+
+function Add-SetupResult {
+    param([string]$Category, [string]$Name, [string]$Status)
+    $null = $Script:SetupResults.Add([PSCustomObject]@{ Category = $Category; Name = $Name; Status = $Status })
+}
+
+function Show-SetupSummary {
+    function Write-ResultSection {
+        param([string]$Title, [object[]]$Items)
+        if (-not $Items -or $Items.Count -eq 0) { return }
+        $installed = @($Items | Where-Object { $_.Status -eq 'Installed' })
+        $skipped   = @($Items | Where-Object { $_.Status -eq 'Skipped' })
+        $failed    = @($Items | Where-Object { $_.Status -eq 'Failed' })
+        Write-Host "`n  $Title" -ForegroundColor Magenta
+        Write-Host ("  " + ([char]0x2500) * 52) -ForegroundColor DarkGray
+        Write-Host "  ✅ Installed: $($installed.Count)   ✨ Already present: $($skipped.Count)   ❌ Failed: $($failed.Count)" -ForegroundColor Cyan
+        if ($installed.Count -gt 0) {
+            Write-Host "  New     : $($installed.Name -join ', ')" -ForegroundColor Green
+        }
+        if ($failed.Count -gt 0) {
+            Write-Host "  Failed  : $($failed.Name -join ', ')" -ForegroundColor Red
+        }
+    }
+
+    $apps  = @($Script:SetupResults | Where-Object { $_.Category -eq 'App' })
+    $tools = @($Script:SetupResults | Where-Object { $_.Category -eq 'Tool' })
+    $exts  = @($Script:SetupResults | Where-Object { $_.Category -eq 'Extension' })
+
+    Write-Host ""
+    Write-Host "  $([char]0x2554)$([char]0x2550)" + ("$([char]0x2550)" * 50) + "$([char]0x2550)$([char]0x2557)" -ForegroundColor Yellow
+    Write-Host "  $([char]0x2551)       $([char]0x1F386)  SETUP COMPLETE $([char]0x2014) SUMMARY  $([char]0x1F386)       $([char]0x2551)" -ForegroundColor Yellow
+    Write-Host "  $([char]0x255A)$([char]0x2550)" + ("$([char]0x2550)" * 50) + "$([char]0x2550)$([char]0x255D)" -ForegroundColor Yellow
+
+    Write-ResultSection "Applications (Winget)" $apps
+    Write-ResultSection "CLI Tools (Chocolatey)" $tools
+    Write-ResultSection "VS Code Extensions" $exts
+
+    Write-Host ""
+    Write-Host "  Your Lucye environment is now impeccable. $([char]0x1F9D9)$([char]0x200D)$([char]0x2642)$([char]0xFE0F)$([char]0x2728)" -ForegroundColor Cyan
+    Write-Host ""
+}
+
 # --- WSL & Features ---
 function Enable-Feature-Via-Dism {
     param([string]$FeatureName, [string]$DisplayName)
@@ -190,32 +234,35 @@ function Transfigure-App {
     
     if ($installed) {
         Write-Host "$([char]27)[1A$([char]27)[2K   ✨ $Name is already present in your spellbook." -ForegroundColor Gray
+        Add-SetupResult -Category 'App' -Name $Name -Status 'Skipped'
         return
     }
-    
+
     # 2. Install package
     Write-Host "$([char]27)[1A$([char]27)[2K   ⚡ Status: Casting transfiguration spell (Installing)..." -ForegroundColor Yellow
-    
+
     $processStart = Get-Date
     $stdOutFile = [System.IO.Path]::GetTempFileName()
     $stdErrFile = [System.IO.Path]::GetTempFileName()
-    
+
     try {
         $params = @("install", "--id", $Id, "-e", "--accept-package-agreements", "--accept-source-agreements", "--silent")
         if ($Override) {
             $params += @("--override", $Override)
         }
-        
+
         $process = Start-Process winget -ArgumentList $params -NoNewWindow -PassThru -Wait -RedirectStandardOutput $stdOutFile -RedirectStandardError $stdErrFile
-        
+
         $duration = [Math]::Round(((Get-Date) - $processStart).TotalSeconds, 1)
-        
+
         if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
             Write-Host "$([char]27)[1A$([char]27)[2K   ✅ $Name successfully transfigured! ($duration s)" -ForegroundColor Green
+            Add-SetupResult -Category 'App' -Name $Name -Status 'Installed'
         } else {
             $errContent = Get-Content $stdErrFile -Raw
             $outContent = Get-Content $stdOutFile -Raw
             Write-Host "$([char]27)[1A$([char]27)[2K   ❌ Failed to summon $Name (Exit code: $($process.ExitCode))." -ForegroundColor Red
+            Add-SetupResult -Category 'App' -Name $Name -Status 'Failed'
             if ($errContent) {
                 Write-Host "      Details: $($errContent.Trim())" -ForegroundColor DarkRed
             } elseif ($outContent -match "Installer failed with exit code") {
@@ -231,6 +278,7 @@ function Transfigure-App {
         }
     } catch {
         Write-Host "$([char]27)[1A$([char]27)[2K   ❌ Spell interrupted for $Name. $_" -ForegroundColor Red
+        Add-SetupResult -Category 'App' -Name $Name -Status 'Failed'
     } finally {
         if (Test-Path $stdOutFile) { Remove-Item $stdOutFile -Force }
         if (Test-Path $stdErrFile) { Remove-Item $stdErrFile -Force }
@@ -241,6 +289,15 @@ function Transfigure-App {
 
 Check-MuggleStatus
 Show-Header
+
+# Pre-flight: disk space check
+$_sysDriveLetter = $env:SystemDrive.TrimEnd(':')
+$_freeGB = try { [Math]::Round((Get-PSDrive $_sysDriveLetter -ErrorAction Stop).Free / 1GB, 1) } catch { $null }
+if ($_freeGB -ne $null -and $_freeGB -lt 20) {
+    Write-Host "`n$([char]0x26A0)  WARNING: $($env:SystemDrive) has only $_freeGB GB free. 20 GB+ recommended." -ForegroundColor Yellow
+    $confirm = Read-Host "Continue anyway? (Y/N)"
+    if ($confirm -ne 'Y') { exit }
+}
 
 if (-not $Resumed) {
     Enable-MagicalFeatures
@@ -309,6 +366,7 @@ Refresh-EnvPaths
 Cast-Spell "Brewing Chocolatey Potions"
 $chocoApps = @(
     @{ Id = "fnm"; Command = "fnm" }
+    @{ Id = "fzf"; Command = "fzf" }
     @{ Id = "jq"; Command = "jq" }
     @{ Id = "k3d"; Command = "k3d" }
     @{ Id = "k9s"; Command = "k9s" }
@@ -330,6 +388,7 @@ foreach ($app in $chocoApps) {
     
     if ($installed) {
         Write-Host "$([char]27)[1A$([char]27)[2K   ✨ $($app['Id']) is already present in your spellbook." -ForegroundColor Gray
+        Add-SetupResult -Category 'Tool' -Name $app['Id'] -Status 'Skipped'
     } else {
         Write-Host "$([char]27)[1A$([char]27)[2K   ⚡ Status: Casting transfiguration spell (Installing)..." -ForegroundColor Yellow
         $processStart = Get-Date
@@ -340,8 +399,10 @@ foreach ($app in $chocoApps) {
             $duration = [Math]::Round(((Get-Date) - $processStart).TotalSeconds, 1)
             if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
                 Write-Host "$([char]27)[1A$([char]27)[2K   ✅ $($app['Id']) successfully transfigured! ($duration s)" -ForegroundColor Green
+                Add-SetupResult -Category 'Tool' -Name $app['Id'] -Status 'Installed'
             } else {
                 Write-Host "$([char]27)[1A$([char]27)[2K   ❌ Failed to summon $($app['Id']) (Exit code: $($process.ExitCode))." -ForegroundColor Red
+                Add-SetupResult -Category 'Tool' -Name $app['Id'] -Status 'Failed'
                 $errContent = Get-Content $stdErrFile -Raw
                 if ($errContent) {
                     Write-Host "      Details: $($errContent.Trim())" -ForegroundColor DarkRed
@@ -349,6 +410,7 @@ foreach ($app in $chocoApps) {
             }
         } catch {
             Write-Host "$([char]27)[1A$([char]27)[2K   ❌ Spell interrupted for $($app['Id']). $_" -ForegroundColor Red
+            Add-SetupResult -Category 'Tool' -Name $app['Id'] -Status 'Failed'
         } finally {
             if (Test-Path $stdOutFile) { Remove-Item $stdOutFile -Force }
             if (Test-Path $stdErrFile) { Remove-Item $stdErrFile -Force }
@@ -372,7 +434,14 @@ $repoRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.FullName
 # 5. VS Code Extensions
 Cast-Spell "Installing VS Code Extensions"
 $extensions = @(
-    "4ops.terraform",
+    # Removed: "4ops.terraform"       (superseded by hashicorp.terraform below)
+    # Removed: "hbenl.vscode-jasmine-test-adapter" (Jasmine less common; built-in testing sufficient)
+    # Removed: "hbenl.vscode-test-explorer"        (VS Code built-in test UI now covers this)
+    # Removed: "ms-vscode.test-adapter-converter"  (only needed by test-explorer above)
+    # Removed: "johnpapa.winteriscoming"            (theme not used; Dracula is active)
+    # Removed: "mintlify.document"                 (GitHub Copilot handles doc generation)
+    # Removed: "knisterpeter.vscode-commitizen"    (superseded by custom git commit functions)
+    # Removed: "ms-vscode.azure-repos"             (GitHub-focused workflow; not Azure DevOps)
     "aaron-bond.better-comments",
     "aliasadidev.nugetpackagemanagergui",
     "amazonwebservices.amazon-q-vscode",
@@ -397,17 +466,12 @@ $extensions = @(
     "github.vscode-pull-request-github",
     "grapecity.gc-excelviewer",
     "hashicorp.terraform",
-    "hbenl.vscode-jasmine-test-adapter",
-    "hbenl.vscode-test-explorer",
     "johnpapa.angular-essentials",
     "johnpapa.angular2",
     "johnpapa.vscode-peacock",
-    "johnpapa.winteriscoming",
-    "knisterpeter.vscode-commitizen",
     "lucono.karma-test-explorer",
     "mechatroner.rainbow-csv",
     "mikeburgh.xml-format",
-    "mintlify.document",
     "ms-azuretools.vscode-containers",
     "ms-azuretools.vscode-docker",
     "ms-dotnettools.csdevkit",
@@ -422,10 +486,8 @@ $extensions = @(
     "ms-python.vscode-python-envs",
     "ms-vscode-remote.remote-containers",
     "ms-vscode-remote.remote-wsl",
-    "ms-vscode.azure-repos",
     "ms-vscode.powershell",
     "ms-vscode.remote-repositories",
-    "ms-vscode.test-adapter-converter",
     "nativescript.nativescript",
     "naumovs.color-highlight",
     "pkief.material-icon-theme",
@@ -446,6 +508,9 @@ foreach ($ext in $extensions) {
         $missingExtensions += $ext
     }
 }
+foreach ($ext in ($extensions | Where-Object { $installedExts -contains $_ })) {
+    Add-SetupResult -Category 'Extension' -Name $ext -Status 'Skipped'
+}
 if ($missingExtensions.Count -gt 0) {
     $extCurrent = 1
     $extTotal = $missingExtensions.Count
@@ -453,6 +518,11 @@ if ($missingExtensions.Count -gt 0) {
         $prefix = "[$extCurrent/$extTotal]"
         Write-Host "`n$prefix $([char]0x2728) Installing VS Code extension: $ext..." -ForegroundColor Cyan
         & code --install-extension $ext --force
+        if ($LASTEXITCODE -eq 0) {
+            Add-SetupResult -Category 'Extension' -Name $ext -Status 'Installed'
+        } else {
+            Add-SetupResult -Category 'Extension' -Name $ext -Status 'Failed'
+        }
         $extCurrent++
     }
 } else {
@@ -524,10 +594,15 @@ try {
         # 4. Set default shell to zsh for user
         & wsl -d Ubuntu-24.04 -u root chsh -s /usr/bin/zsh $realUser
 
-        # 5. Install Zsh plugins (autosuggestions & syntax highlighting)
-        Write-Host "   $([char]0x25c6) Installing Zsh plugins (autosuggestions & syntax highlighting)..." -ForegroundColor Yellow
+        # 5. Install Zsh plugins (autosuggestions, syntax highlighting, history-substring-search)
+        Write-Host "   $([char]0x25c6) Installing Zsh plugins..." -ForegroundColor Yellow
         & wsl -d Ubuntu-24.04 -u $realUser bash -c 'mkdir -p ~/.oh-my-zsh/custom/plugins && if [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ]; then git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions; fi'
         & wsl -d Ubuntu-24.04 -u $realUser bash -c 'if [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting; fi'
+        & wsl -d Ubuntu-24.04 -u $realUser bash -c 'if [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-history-substring-search ]; then git clone https://github.com/zsh-users/zsh-history-substring-search ~/.oh-my-zsh/custom/plugins/zsh-history-substring-search; fi'
+
+        # Install fzf via apt
+        Write-Host "   $([char]0x25c6) Installing fzf..." -ForegroundColor Yellow
+        & wsl -d Ubuntu-24.04 -u root apt install -y fzf
 
         # 6. Install Oh My Posh in WSL
         Write-Host "   $([char]0x25c6) Installing Oh My Posh..." -ForegroundColor Yellow
@@ -550,8 +625,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # Disable default theme since we use Oh My Posh
 ZSH_THEME=""
 
-# Enable plugins (git, z, autosuggestions, syntax highlighting)
-plugins=(git z zsh-autosuggestions zsh-syntax-highlighting)
+# Enable plugins
+plugins=(git z zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -568,13 +643,15 @@ if [ -f "$HOME/.local/bin/oh-my-posh" ]; then
   eval "$(oh-my-posh init zsh --config ~/.oh-my-posh-theme.json)"
 fi
 
-# Up/Down history substring search (matches PSReadLine behavior)
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey "^[[A" up-line-or-beginning-search
-bindkey "^[[B" down-line-or-beginning-search
+# History substring search keybindings (via zsh-history-substring-search plugin)
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# Initialize fzf if available (key bindings: Ctrl+R history, Ctrl+T file search, Alt+C cd)
+if command -v fzf > /dev/null 2>&1; then
+  [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+  [ -f /usr/share/doc/fzf/examples/completion.zsh ]   && source /usr/share/doc/fzf/examples/completion.zsh
+fi
 
 # Source universal aliases
 if [ -f "$HOME/.shell-aliases.sh" ]; then
@@ -602,5 +679,4 @@ fi
 }
 
 Play-Chime -Type 1
-Write-Host "`n🎆 ALL SPELLS CAST SUCCESSFULLY! 🎆" -ForegroundColor Green
-Write-Host "Your Lucye environment is now impeccable." -ForegroundColor Yellow
+Show-SetupSummary
