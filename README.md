@@ -1,82 +1,77 @@
-# Machine Setup Automation
+# 🪄 MachineSetup: The Wizard's Repository
 
-Repository contains the automation scripts to setup the windows PC with the required software.
+Welcome to the automated setup repository for your development environments. This project uses magical automation (PowerShell & Bash) to transfigure a fresh machine into a powerful workstation.
 
-## Prerequisite
+## 🌟 Profiles
 
-- Winget[^1] (_Can be found on Microsoft store as `App Installer`_)
+We support multiple "wizarding" profiles to suit different environments:
 
-Admin previlages to run the scripts
-_Run all the scripts in Administrator mode_
+| Profile | Target | OS | Status |
+| :--- | :--- | :--- | :--- |
+| **Lucye** | Personal | Windows/WSL | 🧙‍♂️ Active |
+| **Lysa** | Work | Windows | 🧪 Brewing |
+| **MacOS** | Work | MacOS | 🧙‍♂️ Active |
 
-## Software Installation
+## 🪄 Lucye Setup (Personal Windows)
 
-Run the [SoftwareInstallation.bat](SoftwareInstallations.bat) to install the following software.
+The Lucye setup is optimized for a full-stack developer working with .NET 10, Java, Python, Angular, and Cloud technologies on Windows and WSL.
 
-### Development Environment
+### **Summoning on Windows (Zero-Git Bootstrapping)**
 
-- Visual Studio 2022 (Community)
-- Visual Studio Code
-- Git
-- GitHub Desktop
-- GitHub CLI
-- Docker Desktop
-- Postman
-- Microsoft Powershell
-- WinMerge
-- Ubuntu (WSL)
+On a brand-new machine without Git installed, you can bootstrap the entire setup with this single command in a **Windows PowerShell** (Administrator) window:
 
-### Communication
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/tsvss/MachineSetup/zero-touch-setup/bootstrap.ps1'))
+```
 
-- Microsoft Teams
-- Whatsapp
-- Zoom
+## 🪄 MacOS Setup (Professional Work)
 
-### Browsers
+The MacOS setup is a professional wizard's kit for work, including Teams, Outlook, Slack, and professional database tools.
 
-- Google Chrome
+### **Summoning on MacOS**
 
-### Misc
+For your Mac, open the Terminal and cast this spell:
 
-- 7 Zip
-- Notepad ++
-- Oh My Posh (Terminal Customization)
-- Google Drive
-- Microsoft Powertoys
-- Twillio Authy
-- VLC
-- Send to Kindle
-- Amazon Kindle
-- Gpg4Win
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/tsvss/MachineSetup/zero-touch-setup/Profiles/MacOS/Setup-MacOS.sh)"
+```
 
-## Installation of Choco Apps
+*Note: This will install Homebrew, summon professional Artifacts (Teams, Slack, etc.), and configure Zsh/Oh My Zsh automatically.*
 
-Run [InstallSoftwares.ps1](./InstallSoftwares.ps1) to setup few softwares using the Choco App installer
 
-### List of Choco Apps
+### **Manual Summoning**
 
-- fnm (Node Manager)
+If you already have Git installed:
 
-## Hyper-V
+1. **Clone the repository:**
+   ```powershell
+   git clone -b zero-touch-setup https://github.com/tsvss/MachineSetup.git
+   cd MachineSetup
+   ```
+2. **Run the central wizard:**
+   ```powershell
+   Set-ExecutionPolicy Bypass -Scope Process -Force
+   .\Start-Magic.ps1
+   ```
 
-Enable the Hyper-V on the Windows using the [HyperV.bat](./HyperV.bat).
-_Run it in Administrator mode_
+### **What's Inside?**
 
-## Terminal Customization
+- **Core Artifacts:** .NET 10 (Elder Wand), Java 25 (Ancient Script), VS Code (Pensieve), Docker (Suitcase).
+- **WSL Chamber:** Ubuntu 24.04 with Zsh, Oh My Zsh, and shared Node tools (Angular, Gemini CLI).
+- **Enchantments:** Cascadia Code Nerd Font, synced VS Code settings (Dracula), and Git configuration.
+- **Vaults:** Google Drive (Gringotts), 1Password (Secret Keeper).
 
-1. Install the Fonts
-   - Install the fonts from the [Fonts](./Fonts/CascadiaCode/) folder
-2. Open the Terminal[^2] and set the Poweshell as the default profile in the settings
-3. Make necessary changes to [Power shell profile](./TerminalSetup/ConfigFiles/powershellProfile.ps1), for the frequently used commands and processes
-4. Run the [setup.bat](./TerminalSetup/setup.bat) to copy and configure the Terminal with Oh-My-Posh theme
-5. Run the [InstallPackages.ps1](./TerminalSetup/InstallPackages.ps1) in the terminal to install the additional packages required by the powershell
+---
 
-## Visual Studio Code Extensions and Settings
+## 📁 Repository Structure
 
-> To be automated
+- `Profiles/`: Profile-specific setup scripts and configurations (e.g., Lucye).
+- `Shared/`: Shared magical assets (Fonts, Terminal themes, VS Code settings).
+- `Scripts/`: Reusable magical helpers (Font installation, Config syncing).
+- `bootstrap.ps1`: The initial spark for fresh machines.
+- `Start-Magic.ps1`: The central portal to select your profile.
 
-[^1]: Install the WinGet from [here][wingetlink]
-[^2]: Install the terminal from [here][terminalgithublink], if not present by default
+---
 
-[wingetlink]: https://aka.ms/getwinget
-[terminalgithublink]: https://github.com/microsoft/terminal/releases
+## 📜 Legal Scrolls
+This project is licensed under the MIT License. Use the magic responsibly.
