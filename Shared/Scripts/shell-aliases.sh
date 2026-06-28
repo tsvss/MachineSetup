@@ -61,6 +61,20 @@ function gco() {
     fi
 }
 
+function gsco() {
+    local branch ticket msg
+    branch=$(git branch --show-current)
+    ticket=$(echo "$branch" | grep -oE '[A-Z]+-[0-9]+' | head -1)
+    if [ -z "$ticket" ]; then
+        echo "⚠️  No Jira ticket found in branch '$branch' — committing without prefix"
+        gco "$1" "$2"
+        return
+    fi
+    msg="$ticket: $1"
+    echo "🎫 Ticket: $ticket"
+    gco "$msg" "$2"
+}
+
 function goblivion() {
     echo "⚠️🧹 Deleting all local branches except those containing 'main'."
     git branch | grep -v "main" | xargs git branch -D
