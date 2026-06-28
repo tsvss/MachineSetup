@@ -93,6 +93,7 @@ formulae=(
     git
     gh
     fnm
+    pure
     python@3.13
     openjdk
     dotnet-sdk
@@ -100,7 +101,6 @@ formulae=(
     kubernetes-cli
     helm
     awscli
-    oh-my-posh
 )
 
 casks=(
@@ -161,11 +161,14 @@ fi
 # fnm (makes `node`, `npm`, `npx` available in every new terminal)
 add_to_zshrc 'eval "$(fnm env --use-on-cd)"'
 
-# Disable Oh My Zsh's built-in theme — Oh My Posh handles the prompt
-# This prevents a brief flash of the default robbyrussell theme on startup
+# pure prompt — disable Oh My Zsh's theme engine and let pure own the prompt
 sed -i '' 's/^ZSH_THEME=.*/ZSH_THEME=""/' ~/.zshrc
+BREW_PREFIX="$(brew --prefix)"
+add_to_zshrc "fpath+=(\"$BREW_PREFIX/share/zsh/site-functions\")"
+add_to_zshrc 'autoload -U promptinit; promptinit'
+add_to_zshrc 'prompt pure'
 
-echo "  ✓ Homebrew and fnm wired into ~/.zshrc"
+echo "  ✓ Homebrew, fnm, and pure prompt wired into ~/.zshrc"
 
 # ── 6. Configurations ─────────────────────────────────────────────────────────
 cast_spell "Enchanting the Environment"
@@ -181,10 +184,6 @@ cp "$REPO_ROOT/Shared/vsCodeSetup/settings.json" ~/Library/Application\ Support/
 sed -i '' 's/"prettier.endOfLine": "crlf"/"prettier.endOfLine": "lf"/' \
     ~/Library/Application\ Support/Code/User/settings.json
 echo "  ✓ VS Code settings deployed"
-
-# Oh My Posh theme (referenced by shell-aliases.sh's init block)
-cp "$REPO_ROOT/Shared/TerminalSetup/ConfigFiles/oh-my-posh-theme.json" ~/.oh-my-posh-theme.json
-echo "  ✓ Oh My Posh theme deployed to ~/.oh-my-posh-theme.json"
 
 # Git
 git config --global user.name "Satya"
