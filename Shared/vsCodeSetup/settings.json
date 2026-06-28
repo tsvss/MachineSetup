@@ -57,11 +57,6 @@
   "[terraform]": {
     "editor.defaultFormatter": "hashicorp.terraform"
   },
-  "amazonQ.suppressPrompts": {
-    "codeWhispererConnectionExpired": true,
-    "amazonQChatDisclaimer": true,
-    "amazonQChatPairProgramming": true
-  },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },

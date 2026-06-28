@@ -94,7 +94,7 @@ formulae=(
     gh
     fnm
     pure
-    python@3.13
+    python@3.14
     openjdk
     dotnet-sdk
     terraform
@@ -105,6 +105,7 @@ formulae=(
 
 casks=(
     visual-studio-code
+    claude
     docker
     1password
     insomnia
@@ -144,7 +145,7 @@ eval "$(fnm env --use-on-cd)"
 fnm install --latest
 fnm use latest
 fnm default latest
-npm install -g @angular/cli @google/gemini-cli
+npm install -g @angular/cli @google/gemini-cli @anthropic-ai/claude-code
 echo "  ✓ Node $(node --version) via fnm, Angular CLI, Gemini CLI installed"
 
 # ── 5. Wire tools into .zshrc ─────────────────────────────────────────────────
@@ -212,8 +213,6 @@ extensions=(
     # Theme & icons
     dracula-theme.theme-dracula
     PKief.material-icon-theme
-    # AI
-    amazonwebservices.amazon-q-vscode
     # .NET
     ms-dotnettools.csdevkit
     ms-dotnettools.csharp
