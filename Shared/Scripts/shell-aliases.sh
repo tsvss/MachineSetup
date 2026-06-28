@@ -152,8 +152,11 @@ function ignite() {
 }
 # endregion Angular helpers
 
-# region Oh My Posh (Windows/WSL only — macOS uses pure via Oh My Zsh)
-if [[ "$OSTYPE" != "darwin"* ]] && [ -x "$(command -v oh-my-posh)" ]; then
+# region Oh My Posh (WSL only — macOS uses pure, plain Linux skips, PowerShell has its own init)
+_is_wsl() {
+    [ -n "$WSL_DISTRO_NAME" ] || grep -qi microsoft /proc/version 2>/dev/null
+}
+if _is_wsl && [ -x "$(command -v oh-my-posh)" ]; then
     current_shell=$(basename "$SHELL")
     if [ "$current_shell" = "zsh" ]; then
         eval "$(oh-my-posh init zsh --config ~/.oh-my-posh-theme.json)"
