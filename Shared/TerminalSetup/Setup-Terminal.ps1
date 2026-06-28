@@ -1,4 +1,4 @@
-# Setup-Terminal.ps1
+﻿# Setup-Terminal.ps1
 # Configures PowerShell profiles and Oh My Posh theme
 
 $profileDir = [System.IO.Path]::GetDirectoryName($PROFILE)

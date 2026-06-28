@@ -11,14 +11,14 @@ $zipPath = Join-Path $env:TEMP "MachineSetup.zip"
 if (Test-Path $tempDir) { Remove-Item $tempDir -Recurse -Force }
 New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
 
-Write-Host "✨ Summoning the full repository archive..." -ForegroundColor Cyan
+Write-Host "$([char]0x2728) Summoning the full repository archive..." -ForegroundColor Cyan
 Invoke-WebRequest -Uri $repoUrl -OutFile $zipPath -UseBasicParsing
 
-Write-Host "📦 Extracting the magical artifacts..." -ForegroundColor Yellow
+Write-Host "$([char]0x2728) Extracting the magical artifacts..." -ForegroundColor Yellow
 Expand-Archive -Path $zipPath -DestinationPath $tempDir -Force
 
 $extractedDir = Get-ChildItem -Path $tempDir | Select-Object -First 1
 cd $extractedDir.FullName
 
-Write-Host "🪄 Starting the Wizard..." -ForegroundColor Green
+Write-Host "$([char]0x2728) Starting the Wizard..." -ForegroundColor Green
 .\Start-Magic.ps1

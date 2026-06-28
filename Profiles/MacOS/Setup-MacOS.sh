@@ -6,24 +6,29 @@
 # --- Impeccable UX: Header & Progress ---
 function show_header() {
     clear
-    echo -e "\033[33m"
-    cat << "EOF"
-    
-    .     .       .  .   . .   .   . .    +  .
-      .     .  :     .    .. :. .___---------___.
-           .  .   .    .  :.:. _".^ .^ ^.  '.. :"-_.
-        .    .   .  .  .: :.. /| |  . . .^ ^  .^  | |
-              .   .:::.::. ::\| | :  . .  .  .  : | |
-         .   .   .:...:.:. .| | ^ .  . .^ ^  .^  | |
-                ..:..:.. . .| |   .  .  .  .  .  | |
-          .    :..:..:..:.. . \_  .  .  . ^  .  _/
-               . `.:."`.;.`._ ^ _"-__..--__-"_  ^
-        .       .. .. .. .. .. ..  ..  ..  ..
-    
-    🪄  WELCOME TO THE MACOS WORK SETUP WIZARD  🪄
-    "Excellence is not a skill, it is a magical attitude."
-EOF
-    echo -e "\033[0m"
+    echo -e "                 \033[33m.\033[0m                  "
+    echo -e "               \033[33m.   .\033[0m                "
+    echo -e "             \033[33m.   :   .\033[0m              "
+    echo -e "         \033[33m\` .   \\\\ | /   . '\033[0m          "
+    echo -e "       \033[33m. - - - - * - - - - .\033[0m        "
+    echo -e "         \033[33m. '   / | \\\\   . '\033[0m          "
+    echo -e "             \033[33m.   :   .\033[0m              "
+    echo -e "               \033[33m.   .\033[0m                "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90m|\033[0m                  "
+    echo -e "                 \033[90mU\033[0m                  "
+    echo ""
+    echo -e "    \033[33m🪄  WELCOME TO THE MACOS WORK SETUP WIZARD  🪄\033[0m"
+    echo -e "    \033[36m\"Excellence is not a skill, it is a magical attitude.\"\033[0m"
+    echo ""
 }
 
 function cast_spell() {
@@ -50,7 +55,7 @@ casks=(
     visual-studio-code
     docker
     1password
-    warp
+    # warp
     insomnia
     google-chrome
     github
