@@ -161,6 +161,10 @@ fi
 # fnm (makes `node`, `npm`, `npx` available in every new terminal)
 add_to_zshrc 'eval "$(fnm env --use-on-cd)"'
 
+# Disable Oh My Zsh's built-in theme — Oh My Posh handles the prompt
+# This prevents a brief flash of the default robbyrussell theme on startup
+sed -i '' 's/^ZSH_THEME=.*/ZSH_THEME=""/' ~/.zshrc
+
 echo "  ✓ Homebrew and fnm wired into ~/.zshrc"
 
 # ── 6. Configurations ─────────────────────────────────────────────────────────
