@@ -17,8 +17,12 @@ function nf() {
     mkdir -p "$1" && cd "$1"
 }
 
-# Adaptation for Windows drives in WSL
-PROJECT_ROOT="/mnt/e"
+# Project root differs by OS: VHD mount on Windows/WSL, ~/Developer on macOS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    PROJECT_ROOT="$HOME/Developer"
+else
+    PROJECT_ROOT="/mnt/e"
+fi
 alias projects="cd $PROJECT_ROOT && echo '📂 Switched to project root: $PROJECT_ROOT'"
 alias dev="cd $PROJECT_ROOT && echo '💽 Switched to dev drive root: $PROJECT_ROOT'"
 
@@ -55,6 +59,20 @@ function gco() {
         echo "📝 Committing: $1"
         git commit -m "$1"
     fi
+}
+
+function gsco() {
+    local branch ticket msg
+    branch=$(git branch --show-current)
+    ticket=$(echo "$branch" | grep -oE '[A-Z]+-[0-9]+' | head -1)
+    if [ -z "$ticket" ]; then
+        echo "⚠️  No Jira ticket found in branch '$branch' — committing without prefix"
+        gco "$1" "$2"
+        return
+    fi
+    msg="$ticket: $1"
+    echo "🎫 Ticket: $ticket"
+    gco "$msg" "$2"
 }
 
 function goblivion() {
@@ -148,8 +166,11 @@ function ignite() {
 }
 # endregion Angular helpers
 
-# region Oh My Posh
-if [ -x "$(command -v oh-my-posh)" ]; then
+# region Oh My Posh (WSL only — macOS uses pure, plain Linux skips, PowerShell has its own init)
+_is_wsl() {
+    [ -n "$WSL_DISTRO_NAME" ] || grep -qi microsoft /proc/version 2>/dev/null
+}
+if _is_wsl && [ -x "$(command -v oh-my-posh)" ]; then
     current_shell=$(basename "$SHELL")
     if [ "$current_shell" = "zsh" ]; then
         eval "$(oh-my-posh init zsh --config ~/.oh-my-posh-theme.json)"
