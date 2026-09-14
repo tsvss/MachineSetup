@@ -158,3 +158,74 @@ if [ -x "$(command -v oh-my-posh)" ]; then
     fi
 fi
 # endregion
+
+# region fzf helpers
+if command -v fzf > /dev/null 2>&1; then
+    function fcd() {
+        local dir
+        dir=$(find "${1:-.}" -type d 2>/dev/null | fzf --preview 'ls -la {}' --prompt="cd > ") && cd "$dir"
+    }
+
+    function fe() {
+        local file
+        file=$(find "${1:-.}" -type f 2>/dev/null | fzf --preview 'cat {}' --prompt="edit > ")
+        [ -n "$file" ] && ${EDITOR:-code} "$file"
+    }
+
+    function gfz() {
+        local branch
+        branch=$(git branch -a 2>/dev/null | sed 's/^[ *]*//' | fzf --prompt="branch > ") || return
+        git checkout "${branch#remotes/origin/}"
+    }
+fi
+# endregion fzf helpers
+
+# region Help
+function aliases() {
+    echo ""
+    echo "✨ Available Shell Aliases & Functions ✨"
+    echo ""
+    echo "📁 [Navigation]"
+    echo "  ..  ....  ......             -> Up 1 / 2 / 3 directories"
+    echo "  nf <name>                    -> Create folder and cd into it"
+    echo "  rmf <path>                   -> Force remove recursively"
+    echo "  projects / dev               -> Jump to $PROJECT_ROOT (Dev Drive: /mnt/e)"
+    echo ""
+    echo "🌿 [Git: Branch & Sync]"
+    echo "  gswitch <branch>             -> git switch"
+    echo "  gb <branch>                  -> git checkout -b"
+    echo "  gbt <id>                     -> git checkout -b task/<id>"
+    echo "  gs <branch>                  -> checkout + pull"
+    echo "  gmaster | gmain | gdev       -> quick switch & pull"
+    echo "  grb <branch>                 -> fetch + rebase onto origin/<branch>"
+    echo "  gpu                          -> git pull"
+    echo "  gpush                        -> push (sets upstream if needed)"
+    echo "  gfp                          -> force push with lease"
+    echo "  gr                           -> HARD reset + clean (⚠️ dangerous)"
+    echo "  goblivion                    -> delete all branches except 'main' (⚠️ dangerous)"
+    echo "  howdy                        -> git status"
+    echo ""
+    echo "📝 [Git: Commits]"
+    echo "  gco '<msg>' ['<body>']       -> stage all + commit"
+    echo "  gfeat | gfix | gtest | gdocs | gstyle | grefactor | gperf | gchore | gwf"
+    echo "       '<msg>' ['<body>'] ['<scope>']  -> conventional commit"
+    echo "  goops [<msg>]                -> amend last commit"
+    echo "  goops -Edit                  -> amend + open editor"
+    echo ""
+    echo "🅰️ [Angular]"
+    echo "  ignite [<port>]              -> ng serve --ssl"
+    echo ""
+    if command -v fzf > /dev/null 2>&1; then
+        echo "🔍 [fzf Fuzzy Search]"
+        echo "  fcd [<dir>]                  -> fuzzy cd into a subdirectory"
+        echo "  fe [<dir>]                   -> fuzzy open file in \$EDITOR"
+        echo "  gfz                          -> fuzzy git branch switch"
+        echo "  Ctrl+R                       -> fuzzy history search"
+        echo "  Ctrl+T                       -> fuzzy file insert"
+        echo "  Alt+C                        -> fuzzy cd"
+        echo ""
+    fi
+    echo "💡 Run 'aliases' anytime to see this list."
+    echo ""
+}
+# endregion Help

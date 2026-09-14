@@ -3,6 +3,18 @@
 
 $repoRoot = (Get-Item $PSScriptRoot).Parent.FullName
 
+$Script:BackupTimestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+
+function Backup-Config {
+    param([string]$TargetPath)
+    if (-not (Test-Path $TargetPath)) { return }
+    $backupDir = Join-Path "$env:USERPROFILE\.config-backups" $Script:BackupTimestamp
+    if (-not (Test-Path $backupDir)) { New-Item -ItemType Directory -Path $backupDir -Force | Out-Null }
+    $fileName = Split-Path $TargetPath -Leaf
+    Copy-Item $TargetPath -Destination (Join-Path $backupDir $fileName) -Force
+    Write-Host "   $([char]0x1F4E6) Backed up $fileName $([char]0x2192) $backupDir" -ForegroundColor DarkGray
+}
+
 # VS Code
 Write-Host "$([char]0x2728) Syncing VS Code settings..." -ForegroundColor Cyan
 $vscodeSettingsPath = "$env:APPDATA\Code\User\settings.json"
@@ -10,6 +22,7 @@ $sourceSettings = Join-Path $repoRoot "Shared\vsCodeSetup\settings.json"
 if (Test-Path $sourceSettings) {
     $vscodeDir = Split-Path $vscodeSettingsPath -Parent
     if (-not (Test-Path $vscodeDir)) { New-Item -ItemType Directory -Path $vscodeDir -Force }
+    Backup-Config $vscodeSettingsPath
     Copy-Item $sourceSettings -Destination $vscodeSettingsPath -Force
 }
 
@@ -21,6 +34,7 @@ if (Test-Path $wtSourceSettings) {
     if (-not (Test-Path $wtSettingsDir)) {
         New-Item -ItemType Directory -Path $wtSettingsDir -Force
     }
+    Backup-Config (Join-Path $wtSettingsDir "settings.json")
     Copy-Item $wtSourceSettings -Destination (Join-Path $wtSettingsDir "settings.json") -Force
 }
 
@@ -38,6 +52,7 @@ if (-not (Test-Path $profileDir)) {
 }
 $sourceProfile = Join-Path $repoRoot "Shared\TerminalSetup\ConfigFiles\powershellProfile.ps1"
 if (Test-Path $sourceProfile) {
+    Backup-Config $pwshProfilePath
     Copy-Item $sourceProfile -Destination $pwshProfilePath -Force
 }
 
@@ -49,6 +64,7 @@ if (-not (Test-Path $ompDir)) {
 }
 $sourceOmpTheme = Join-Path $repoRoot "Shared\TerminalSetup\ConfigFiles\oh-my-posh-theme.json"
 if (Test-Path $sourceOmpTheme) {
+    Backup-Config "$ompDir\theme.json"
     Copy-Item $sourceOmpTheme -Destination "$ompDir\theme.json" -Force
 }
 
