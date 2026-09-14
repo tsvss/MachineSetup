@@ -6,26 +6,135 @@
     {
       "type": "prompt",
       "alignment": "left",
-      "newline": true,
       "segments": [
         {
-          "type": "path",
-          "style": "plain",
-          "foreground": "#7aa2f7",
-          "template": "{{ .Path }}",
+          "type": "os",
+          "style": "diamond",
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "foreground": "#ffffff",
+          "background": "#EE64AC",
+          "template": " {{ .Icon }} ",
           "properties": {
-            "style": "full",
-            "home_icon": "~"
+            "windows": "",
+            "linux": "",
+            "macos": ""
+          }
+        },
+        {
+          "type": "path",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#ffffff",
+          "background": "#ff479c",
+          "template": "  {{ .Path }} ",
+          "properties": {
+            "style": "folder"
           }
         },
         {
           "type": "git",
-          "style": "plain",
-          "foreground": "#bb9af7",
-          "template": " on  {{ .HEAD }}{{ if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} <#e0af68> {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }} <#9ece6a> {{ .Staging.String }}</>{{ end }}",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#193549",
+          "background": "#FAB795",
+          "template": " {{ .UpstreamIcon }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and (.Staging.Changed) (.Working.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }}  {{ .StashCount }}{{ end }} ",
           "properties": {
+            "fetch_stash_count": true,
             "fetch_status": true,
             "fetch_upstream_icon": true
+          }
+        },
+        {
+          "type": "dotnet",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#ffffff",
+          "background": "#6CA35E",
+          "template": "  {{ if .Unsupported }}{{ else }}{{ .Full }}{{ end }} ",
+          "properties": {
+            "fetch_version": true
+          }
+        },
+        {
+          "type": "angular",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#ffffff",
+          "background": "#1976d2",
+          "template": "  {{ .Full }} "
+        },
+        {
+          "type": "node",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#193549",
+          "background": "#3FDAA4",
+          "template": "  {{ .Full }} ",
+          "properties": {
+            "fetch_version": true
+          }
+        },
+        {
+          "type": "python",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#ffffff",
+          "background": "#26BBD9",
+          "template": "  {{ .Full }}{{ if .Venv }} ({{ .Venv }}){{ end }} ",
+          "properties": {
+            "fetch_version": true,
+            "fetch_virtual_env": true
+          }
+        },
+        {
+          "type": "go",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#193549",
+          "background": "#59E1E3",
+          "template": "  {{ .Full }} ",
+          "properties": {
+            "fetch_version": true
+          }
+        },
+        {
+          "type": "kubectl",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#ffffff",
+          "background": "#326CE5",
+          "template": " ⎈ {{ .Context }}{{ if .Namespace }}::{{ .Namespace }}{{ end }} "
+        },
+        {
+          "type": "terraform",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#ffffff",
+          "background": "#7B42BC",
+          "template": "  {{ .WorkspaceName }} "
+        },
+        {
+          "type": "root",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#193549",
+          "background": "#ffff66",
+          "template": "  "
+        },
+        {
+          "type": "exit",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#ffffff",
+          "background": "#2e9599",
+          "background_templates": [
+            "{{ if gt .Code 0 }}#f1184c{{ end }}"
+          ],
+          "trailing_diamond": "",
+          "template": " {{ if gt .Code 0 }} {{ .Code }}{{ else }}{{ end }} ",
+          "properties": {
+            "always_enabled": true
           }
         }
       ]
@@ -35,23 +144,21 @@
       "alignment": "right",
       "segments": [
         {
-          "type": "node",
+          "type": "executiontime",
           "style": "plain",
-          "foreground": "#565f89",
-          "template": " {{ .Full }}",
+          "foreground": "#FAB795",
+          "template": " {{ .FormattedMs }} ",
           "properties": {
-            "fetch_version": true,
-            "display_mode": "files"
+            "threshold": 2000,
+            "style": "austin",
+            "always_enabled": false
           }
         },
         {
-          "type": "dotnet",
+          "type": "time",
           "style": "plain",
-          "foreground": "#565f89",
-          "template": "   {{ if .Unsupported }}{{ else }}{{ .Full }}{{ end }}",
-          "properties": {
-            "fetch_version": true
-          }
+          "foreground": "#848484",
+          "template": " {{ .CurrentDate | date \"15:04\" }} "
         }
       ]
     },
@@ -61,16 +168,10 @@
       "newline": true,
       "segments": [
         {
-          "type": "exit",
+          "type": "text",
           "style": "plain",
-          "foreground": "#9ece6a",
-          "foreground_templates": [
-            "{{ if gt .Code 0 }}#f7768e{{ end }}"
-          ],
-          "template": "❯",
-          "properties": {
-            "always_enabled": true
-          }
+          "foreground": "#29D398",
+          "template": "❯ "
         }
       ]
     }
